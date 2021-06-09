@@ -271,6 +271,7 @@ public class Settings {
     public static final String KEY_GALLERY_SITE = "gallery_site";
     private static final int DEFAULT_GALLERY_SITE = 1;
 
+    //从SharedPreferences中读取默认的KEY_GALLERY_SITE
     public static int getGallerySite() {
         return getIntFromStr(KEY_GALLERY_SITE, DEFAULT_GALLERY_SITE);
     }

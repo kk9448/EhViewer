@@ -184,6 +184,7 @@ public abstract class StageActivity extends EhActivity {
                 if (Intent.ACTION_MAIN.equals(action)) {
                     Announcer announcer = getLaunchAnnouncer();
                     if (announcer != null) {
+                        //announcer中包含了启动名称的.class
                         startScene(announcer);
                         return;
                     }
