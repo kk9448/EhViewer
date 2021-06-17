@@ -77,6 +77,8 @@ public abstract class StageActivity extends EhActivity {
 
     private static final Map<Class<?>, Integer> sLaunchModeMap = new HashMap<>();
 
+
+    //不同的scene有不同的launch_mode(是一个数字)
     public static void registerLaunchMode(Class<?> clazz, @SceneFragment.LaunchMode int launchMode) {
         if (launchMode != SceneFragment.LAUNCH_MODE_STANDARD &&
                 launchMode != SceneFragment.LAUNCH_MODE_SINGLE_TOP &&
@@ -185,6 +187,7 @@ public abstract class StageActivity extends EhActivity {
                     Announcer announcer = getLaunchAnnouncer();
                     if (announcer != null) {
                         //announcer中包含了启动名称的.class
+                        //class为GalleryListScene.class
                         startScene(announcer);
                         return;
                     }
@@ -265,10 +268,15 @@ public abstract class StageActivity extends EhActivity {
     }
 
     public void startScene(Announcer announcer) {
+        //初始化为GalleryListScene.class
         Class<?> clazz = announcer.clazz;
         Bundle args = announcer.args;
         TransitionHelper tranHelper = announcer.tranHelper;
         FragmentManager fragmentManager = getSupportFragmentManager();
+        //返回一个int
+        //public static final int LAUNCH_MODE_STANDARD = 0;
+        //public static final int LAUNCH_MODE_SINGLE_TOP = 1;
+        //public static final int LAUNCH_MODE_SINGLE_TASK = 2;
         int launchMode = getSceneLaunchMode(clazz);
 
         // Check LAUNCH_MODE_SINGLE_TASK
@@ -348,6 +356,7 @@ public abstract class StageActivity extends EhActivity {
         }
 
         // Create new scene
+        //clazz为GalleryListScene.class
         SceneFragment newScene = newSceneInstance(clazz);
         newScene.setArguments(args);
 

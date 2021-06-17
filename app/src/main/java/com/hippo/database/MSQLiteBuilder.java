@@ -55,6 +55,8 @@ public class MSQLiteBuilder {
 
   private int version = 0;
   private List<String> statements;
+
+  //android为<Integer, Object>的HashMap专门写的类，key必须为int， 避免了自动装箱
   private SparseArray<List<String>> statementsMap = new SparseArray<>();
 
   /**

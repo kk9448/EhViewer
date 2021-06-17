@@ -275,6 +275,7 @@ public final class GalleryListScene extends BaseScene
         super.onCreate(savedInstanceState);
 
         Context context = getContext2();
+        //context为null则抛出异常
         AssertUtils.assertNotNull(context);
         mClient = EhApplication.getEhClient(context);
         mDownloadManager = EhApplication.getDownloadManager(context);
@@ -585,6 +586,7 @@ public final class GalleryListScene extends BaseScene
 
         mHideActionFabSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mShowActionFab = true;
+
 
         View mainLayout = ViewUtils.$$(view, R.id.main_layout);
         ContentLayout contentLayout = (ContentLayout) ViewUtils.$$(mainLayout, R.id.content_layout);
