@@ -60,6 +60,10 @@ class CookieDatabase {
   private final SQLiteDatabase db;
 
   public CookieDatabase(Context context, String name) {
+
+    /**
+     * return a SQLiteOpenHelper from it.
+     */
     helper = new MSQLiteBuilder()
         .version(VERSION_1)
         .createTable(TABLE_COOKIE)
