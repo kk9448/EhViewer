@@ -49,6 +49,9 @@ public final class EhFilter {
     }
 
     private EhFilter() {
+        /**
+         * 从EhDB中获得所有filter的集合
+         * */
         List<Filter> list = EhDB.getAllFilter();
         for (int i = 0, n = list.size(); i < n; i++) {
             Filter filter = list.get(i);

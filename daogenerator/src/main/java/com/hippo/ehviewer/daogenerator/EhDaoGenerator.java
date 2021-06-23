@@ -42,6 +42,7 @@ public class EhDaoGenerator {
     private static final String FILTER_PATH = "../app/src/main/java-gen/com/hippo/ehviewer/dao/Filter.java";
 
     public static void generate() throws Exception {
+        //删除该目录下的内容
         Utilities.deleteContents(new File(DELETE_DIR));
         File outDir = new File(OUT_DIR);
         outDir.delete();

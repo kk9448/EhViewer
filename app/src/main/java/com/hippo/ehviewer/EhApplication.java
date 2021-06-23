@@ -123,17 +123,52 @@ public class EhApplication extends RecordingApplication {
 
         super.onCreate();
 
+        //GetText类中的的Resources sResources;被初始化
         GetText.initialize(this);
+        //StatusCodeException类中的SparseArray<String> ERROR_MESSAGE_ARRAY， SparseArray<String> ERROR_MESSAGE_ARRAY 被初始化
         StatusCodeException.initialize(this);
+        /**
+         * 初始化
+            private static Context sContext;
+            private static SharedPreferences sSettingsPre;
+            private static EhConfig sEhConfig;
+        * */
         Settings.initialize(this);
+        /**初始化Readable中的
+         * private static Resources sResources;
+         **/
         ReadableTime.initialize(this);
+        /**初始化Html中的
+         * private static Resources sResources;
+         **/
         Html.initialize(this);
+        /**初始化Appconfig中的
+         * private static Context sContext;
+         **/
         AppConfig.initialize(this);
+        /**
+         * 设置LruCache
+         * */
         SpiderDen.initialize(this);
+        /**
+         *  初始化数据库， 建立daoMaster.newSession();
+         * */
         EhDB.initialize(this);
+        /**
+         * 从EhDB中， 获得EhFilter， 初始化EhEngine
+         * */
         EhEngine.initialize();
+
+        /**
+         * 获得BitmapUtils实例（只初始化了context）
+         * */
         BitmapUtils.initialize(this);
+
         Image.initialize(this);
+
+        /**
+         * hippo A7Zip
+         * */
         A7Zip.loadLibrary(A7ZipExtractLite.LIBRARY, libname -> ReLinker.loadLibrary(EhApplication.this, libname));
 
         if (EhDB.needMerge()) {

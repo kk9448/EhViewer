@@ -75,7 +75,9 @@ public class IoThreadPoolExecutor extends ThreadPoolExecutor {
 
     @Override
     public boolean offer(@NonNull Runnable o) {
+      //活跃的和在queue中的进程
       int allWorkingThreads = executor.getActiveCount() + super.size();
+      //先执行allWorkingThreads < executor.getPoolSize()， 如果小于最大设定线程数，先使用最大线程， 再放入队列
       return allWorkingThreads < executor.getPoolSize() && super.offer(o);
     }
   }
