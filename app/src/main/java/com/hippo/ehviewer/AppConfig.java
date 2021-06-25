@@ -48,8 +48,14 @@ public class AppConfig {
 
     @Nullable
     public static File getExternalAppDir() {
+        /**
+         * Environment.getExternalStorageState()系统API，获取外部储存状态
+         * */
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            //Environment.getExternalStorageDirectory() 返回file， 获取储存目录/storage/sdcard APP_DIRNAME = "EhViewer"
+            //根据parent的抽象路径名， child的路径名，创建一个File实例， 如果已经创建，则不能成功
             File dir = new File(Environment.getExternalStorageDirectory(), APP_DIRNAME);
+            //ensureDirectory(dir)，是文件夹返回true， 不是返回false
             return FileUtils.ensureDirectory(dir) ? dir : null;
         }
         return null;
@@ -80,6 +86,7 @@ public class AppConfig {
 
     @Nullable
     public static File getDefaultDownloadDir() {
+        //DOWNLOAD = string "download"
         return getDirInExternalAppDir(DOWNLOAD);
     }
 

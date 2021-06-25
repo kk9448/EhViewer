@@ -185,10 +185,13 @@ public class EhApplication extends RecordingApplication {
             protected Void doInBackground(Void... voids) {
                 // Check no media file
                 try {
+                    // RawFile extends UniFile, 使用基本的File初始化RawFile
                     UniFile downloadLocation = Settings.getDownloadLocation();
                     if (Settings.getMediaScan()) {
+                        //如果允许被扫描， 删除.nomedia
                         CommonOperations.removeNoMediaFile(downloadLocation);
                     } else {
+                        //如果不允许被扫描， 生成.nomedia， 保证文件存在
                         CommonOperations.ensureNoMediaFile(downloadLocation);
                     }
                 } catch (Throwable t) {

@@ -403,7 +403,7 @@ public final class CommonOperations {
         if (null == file) {
             return;
         }
-
+        //subFile Get child file of this directory, the child might not exist.
         UniFile noMedia = file.subFile(".nomedia");
         if (null != noMedia && noMedia.isFile()) {
             noMedia.delete();

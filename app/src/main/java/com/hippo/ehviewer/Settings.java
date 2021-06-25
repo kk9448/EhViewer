@@ -598,16 +598,25 @@ public class Settings {
         UniFile dir = null;
         try {
             Uri.Builder builder = new Uri.Builder();
+            /***
+             *  从SharedPreferences中获取key的值， 没有则设置为null
+             */
             builder.scheme(getString(KEY_DOWNLOAD_SAVE_SCHEME, null));
             builder.encodedAuthority(getString(KEY_DOWNLOAD_SAVE_AUTHORITY, null));
             builder.encodedPath(getString(KEY_DOWNLOAD_SAVE_PATH, null));
             builder.encodedQuery(getString(KEY_DOWNLOAD_SAVE_QUERY, null));
             builder.encodedFragment(getString(KEY_DOWNLOAD_SAVE_FRAGMENT, null));
+            /**
+             * 返回一个Unifile的子类RawFile， 使用uri初始化file， 用file初始化RawFile
+             * */
             dir = UniFile.fromUri(sContext, builder.build());
         } catch (Throwable e) {
             ExceptionUtils.throwIfFatal(e);
             // Ignore
         }
+        /**
+         * 返回一个Unifile的子类RawFile，用file初始化RawFile
+         * */
         return dir != null ? dir : UniFile.fromFile(AppConfig.getDefaultDownloadDir());
     }
 
@@ -630,6 +639,7 @@ public class Settings {
     private static final boolean DEFAULT_MEDIA_SCAN = false;
 
     public static boolean getMediaScan() {
+        //从sharedPreference中获取 string "key_media_scan" 默认是false
         return getBoolean(KEY_MEDIA_SCAN, DEFAULT_MEDIA_SCAN);
     }
 
