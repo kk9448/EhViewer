@@ -326,6 +326,7 @@ public final class MainActivity extends StageActivity
     protected void onCreate2(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
 
+        //$$返回一个View
         mDrawerLayout = (EhDrawerLayout) ViewUtils.$$(this, R.id.draw_view);
         mNavView = (NavigationView) ViewUtils.$$(this, R.id.nav_view);
         mRightDrawer = (FrameLayout) ViewUtils.$$(this, R.id.right_drawer);
@@ -341,14 +342,17 @@ public final class MainActivity extends StageActivity
             mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow_right, Gravity.RIGHT);
         }
 
+        //更新Avatar和名字
         updateProfile();
 
         if (mNavView != null) {
             mNavView.setNavigationItemSelectedListener(this);
         }
 
+        //Button  mChangeTheme
         mChangeTheme.setText(getThemeText());
         mChangeTheme.setOnClickListener(v -> {
+            //sharedPreference里放置主题
             Settings.putTheme(getNextTheme());
             ((EhApplication) getApplication()).recreate();
         });

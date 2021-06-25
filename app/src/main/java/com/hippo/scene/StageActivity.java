@@ -161,6 +161,7 @@ public abstract class StageActivity extends EhActivity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
+            //从Bundle中获取State ID
             mStageId = savedInstanceState.getInt(KEY_STAGE_ID, IntIdGenerator.INVALID_ID);
             ArrayList<String> list = savedInstanceState.getStringArrayList(KEY_SCENE_TAG_LIST);
             if (list != null) {
@@ -171,6 +172,7 @@ public abstract class StageActivity extends EhActivity {
         }
 
         if (mStageId == IntIdGenerator.INVALID_ID) {
+            //放在Application中的 SparseArray<StageActivity> mStageMap中
             ((SceneApplication) getApplicationContext()).registerStageActivity(this);
         } else {
             ((SceneApplication) getApplicationContext()).registerStageActivity(this, mStageId);

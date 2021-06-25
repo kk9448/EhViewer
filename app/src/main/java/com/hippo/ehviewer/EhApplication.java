@@ -207,6 +207,7 @@ public class EhApplication extends RecordingApplication {
 
                 return null;
             }
+            //使用。execute(),只单独使用了一个线程， executeOnExecutor使用线程池， 并行
         }.executeOnExecutor(IoThreadPoolExecutor.getInstance());
 
         // Check app update
@@ -230,6 +231,7 @@ public class EhApplication extends RecordingApplication {
     }
 
     private void clearTempDir() {
+        //从sharedPreference中取得TempDir
         File dir = AppConfig.getTempDir();
         if (null != dir) {
             FileUtils.deleteContent(dir);
@@ -238,7 +240,6 @@ public class EhApplication extends RecordingApplication {
         if (null != dir) {
             FileUtils.deleteContent(dir);
         }
-
         // Add .nomedia to external temp dir
         CommonOperations.ensureNoMediaFile(UniFile.fromFile(AppConfig.getExternalTempDir()));
     }

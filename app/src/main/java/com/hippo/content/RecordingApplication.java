@@ -73,8 +73,10 @@ public abstract class RecordingApplication extends SceneApplication {
     });
   }
 
+  //这个recreate是自定义的， 不是Android自带的
   public void recreate() {
     // Copy list
+    //  List<WeakReference<Activity>> list， list为所有activity的集合
     ArrayList<Activity> listCopy = new ArrayList<>(list.size());
     for (WeakReference<Activity> reference: list) {
       Activity activity = reference.get();
@@ -84,6 +86,7 @@ public abstract class RecordingApplication extends SceneApplication {
 
     // Finish all activities
     for (int i = listCopy.size() - 1; i >= 0; --i) {
+      //这个是系统Activity中的自带的recreate()
       listCopy.get(i).recreate();
     }
   }
