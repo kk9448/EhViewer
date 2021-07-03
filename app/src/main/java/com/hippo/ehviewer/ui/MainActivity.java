@@ -163,6 +163,7 @@ public final class MainActivity extends StageActivity
     @Nullable
     @Override
     protected Announcer getLaunchAnnouncer() {
+        //检测显示画廊前， 其它的组件
         if (!TextUtils.isEmpty(Settings.getSecurity())) {
             return new Announcer(SecurityScene.class);
         } else if (Settings.getShowWarning()) {
@@ -175,6 +176,7 @@ public final class MainActivity extends StageActivity
             return new Announcer(SelectSiteScene.class);
         } else {
             Bundle args = new Bundle();
+            //KEY_ACTION = "action" getLaunchPageGalleryListSceneAction()获取启动页
             args.putString(GalleryListScene.KEY_ACTION, Settings.getLaunchPageGalleryListSceneAction());
             return new Announcer(GalleryListScene.class).setArgs(args);
         }
@@ -354,10 +356,12 @@ public final class MainActivity extends StageActivity
         mChangeTheme.setOnClickListener(v -> {
             //sharedPreference里放置主题
             Settings.putTheme(getNextTheme());
+            //重新创建Activity
             ((EhApplication) getApplication()).recreate();
         });
 
         if (savedInstanceState == null) {
+            //Check permission
             onInit();
             CommonOperations.checkUpdate(this, false);
             checkDownloadLocation();

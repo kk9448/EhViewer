@@ -277,6 +277,7 @@ public final class GalleryListScene extends BaseScene
         Context context = getContext2();
         //context为null则抛出异常
         AssertUtils.assertNotNull(context);
+
         mClient = EhApplication.getEhClient(context);
         mDownloadManager = EhApplication.getDownloadManager(context);
         mFavouriteStatusRouter = EhApplication.getFavouriteStatusRouter(context);

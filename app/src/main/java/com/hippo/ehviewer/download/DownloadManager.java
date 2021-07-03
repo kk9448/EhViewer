@@ -85,10 +85,30 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         mContext = context;
 
         // Get all labels
+        //DownnLoadLabel为greenDao生成文件
+        //entity.addStringProperty("label");
+        //entity.addLongProperty("time").notNull();
         List<DownloadLabel> labels = EhDB.getAllDownloadLabelList();
         mLabelList = labels;
 
         // Create list for each label
+        /**
+         *         entity.addLongProperty("gid").primaryKey().notNull();
+         *         entity.addStringProperty("token");
+         *         entity.addStringProperty("title");
+         *         entity.addStringProperty("titleJpn");
+         *         entity.addStringProperty("thumb");
+         *         entity.addIntProperty("category").notNull();
+         *         entity.addStringProperty("posted");
+         *         entity.addStringProperty("uploader");
+         *         entity.addFloatProperty("rating").notNull();
+         *         entity.addStringProperty("simpleLanguage");
+         *         // DownloadInfo data
+         *         entity.addIntProperty("state").notNull();
+         *         entity.addIntProperty("legacy").notNull();
+         *         entity.addLongProperty("time").notNull();
+         *         entity.addStringProperty("label");
+         * */
         HashMap<String, LinkedList<DownloadInfo>> map = new HashMap<>();
         mMap = map;
         for (DownloadLabel label : labels) {

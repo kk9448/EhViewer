@@ -180,10 +180,11 @@ public abstract class StageActivity extends EhActivity {
 
         // Create layout
         onCreate2(savedInstanceState);
-
+        //就算是一开始初始化，intent也不是null
         Intent intent = getIntent();
         if (savedInstanceState == null) {
             if (intent != null) {
+                //注意， 返回的是一个字符串 string =  "android.intent.action.MAIN"
                 String action = intent.getAction();
                 if (Intent.ACTION_MAIN.equals(action)) {
                     Announcer announcer = getLaunchAnnouncer();
@@ -279,6 +280,7 @@ public abstract class StageActivity extends EhActivity {
         //public static final int LAUNCH_MODE_STANDARD = 0;
         //public static final int LAUNCH_MODE_SINGLE_TOP = 1;
         //public static final int LAUNCH_MODE_SINGLE_TASK = 2;
+        //GalleryListScene是1
         int launchMode = getSceneLaunchMode(clazz);
 
         // Check LAUNCH_MODE_SINGLE_TASK
@@ -349,7 +351,7 @@ public abstract class StageActivity extends EhActivity {
             }
         }
 
-        // Check LAUNCH_MODE_SINGLE_TASK
+        // Check LAUNCH_MODE_SINGLE_TOP
         if (clazz.isInstance(currentScene) && launchMode == SceneFragment.LAUNCH_MODE_SINGLE_TOP) {
             if (args != null) {
                 currentScene.onNewArguments(args);
@@ -359,6 +361,7 @@ public abstract class StageActivity extends EhActivity {
 
         // Create new scene
         //clazz为GalleryListScene.class
+        //SceneFragment extends Fragment
         SceneFragment newScene = newSceneInstance(clazz);
         newScene.setArguments(args);
 
@@ -366,6 +369,7 @@ public abstract class StageActivity extends EhActivity {
         String newTag = Integer.toString(mIdGenerator.getAndIncrement());
 
         // Add new tag to list
+        // mSceneTagList和 mDelaySceneTagList 都是 ArrayList<String>
         mSceneTagList.add(newTag);
         mDelaySceneTagList.add(newTag);
 
@@ -395,6 +399,10 @@ public abstract class StageActivity extends EhActivity {
         }
 
         // Add new scene
+        // getContainerViewId() return R.id.fragment_container
+        //@param newTag Optional tag name for the fragment, to later retrieve the
+        //     fragment with {@link FragmentManager#findFragmentByTag(String)
+        //  newScene是一个fragment实例
         transaction.add(getContainerViewId(), newScene, newTag);
 
         // Commit

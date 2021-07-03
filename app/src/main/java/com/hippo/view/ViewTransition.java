@@ -35,6 +35,8 @@ public class ViewTransition {
 
     private OnShowViewListener mOnShowViewListener;
 
+    //可以储存大于2个view
+    //因为同时只有一个显示，所以同时切换的只有两个
     public ViewTransition(View... views) {
         if (views.length < 2) {
             throw new IllegalStateException("You must pass view to ViewTransition");
