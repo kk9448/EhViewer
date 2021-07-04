@@ -579,6 +579,7 @@ public final class GalleryListScene extends BaseScene
     @Override
     public View onCreateView2(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+        //inflater.inflate() 将XML转换为View布局
         View view = inflater.inflate(R.layout.scene_gallery_list, container, false);
 
         Context context = getContext2();
@@ -602,9 +603,11 @@ public final class GalleryListScene extends BaseScene
         int paddingTopSB = resources.getDimensionPixelOffset(R.dimen.gallery_padding_top_search_bar);
         int paddingBottomFab = resources.getDimensionPixelOffset(R.dimen.gallery_padding_bottom_fab);
 
+        //向ViewTransition的view数组中， 添加view, 并实现转换
         mViewTransition = new ViewTransition(contentLayout, mSearchLayout);
 
         mHelper = new GalleryListHelper();
+        // contentLayout里有一个helper
         contentLayout.setHelper(mHelper);
         contentLayout.getFastScroller().setOnDragHandlerListener(this);
 
@@ -653,6 +656,7 @@ public final class GalleryListScene extends BaseScene
         onUpdateUrlBuilder();
 
         // Restore state
+        //STATE_NORMAL = 0；
         int newState = mState;
         mState = STATE_NORMAL;
         setState(newState, false);

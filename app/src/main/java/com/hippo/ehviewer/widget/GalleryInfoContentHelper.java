@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//extends ContentLayout.ContentHelper类
 public abstract class GalleryInfoContentHelper extends ContentLayout.ContentHelper<GalleryInfo> {
 
   private static final String KEY_DATA_MAP = "data_map";

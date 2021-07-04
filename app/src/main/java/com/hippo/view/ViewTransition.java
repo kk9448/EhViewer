@@ -37,6 +37,7 @@ public class ViewTransition {
 
     //可以储存大于2个view
     //因为同时只有一个显示，所以同时切换的只有两个
+    //向ViewTransition的view数组中， 添加view
     public ViewTransition(View... views) {
         if (views.length < 2) {
             throw new IllegalStateException("You must pass view to ViewTransition");
@@ -70,19 +71,30 @@ public class ViewTransition {
             throw new IndexOutOfBoundsException("Only " + length + " view(s) in " +
                     "the ViewTransition, but attempt to show " + shownView);
         }
-
+        System.out.println(views[0]);
+        System.out.println(views[1]);
+        //mShownView初始化为-1
+        //shownView为0
         if (mShownView != shownView) {
+
+            //oldShownView为-1
             int oldShownView = mShownView;
+            //更新mShownView为0
             mShownView = shownView;
 
             // Cancel animation
+            //mAnimator1初始化为null
             if (mAnimator1 != null) {
                 mAnimator1.cancel();
             }
+            //mAnimator2初始化为null
             if (mAnimator2 != null) {
                 mAnimator2.cancel();
             }
 
+            //初始化为false
+            //oldShownView为-1
+            //更新mShownView为0
             if (animation) {
                 for (int i = 0; i < length; i++) {
                     if (i != oldShownView && i != shownView) {
