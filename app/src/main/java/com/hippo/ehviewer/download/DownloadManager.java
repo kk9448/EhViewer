@@ -92,7 +92,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         mLabelList = labels;
 
         // Create list for each label
-        /**
+        /**        DownloadInfo
          *         entity.addLongProperty("gid").primaryKey().notNull();
          *         entity.addStringProperty("token");
          *         entity.addStringProperty("title");

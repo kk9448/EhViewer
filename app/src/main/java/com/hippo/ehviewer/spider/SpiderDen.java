@@ -44,7 +44,13 @@ import java.util.Locale;
 
 public final class SpiderDen {
 
+
+
     @Nullable
+    /**
+     * In Android files can be accessed via {@link java.io.File} and {@link android.net.Uri}.
+     * The UniFile is designed to emulate File interface for both File and Uri.
+     */
     private final UniFile mDownloadDir;
     private volatile int mMode = SpiderQueen.MODE_READ;
     private final long mGid;

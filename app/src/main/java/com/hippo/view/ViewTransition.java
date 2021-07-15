@@ -71,8 +71,8 @@ public class ViewTransition {
             throw new IndexOutOfBoundsException("Only " + length + " view(s) in " +
                     "the ViewTransition, but attempt to show " + shownView);
         }
-        System.out.println(views[0]);
-        System.out.println(views[1]);
+//        System.out.println(views[0]);
+//        System.out.println(views[1]);
         //mShownView初始化为-1
         //shownView为0
         if (mShownView != shownView) {
@@ -105,6 +105,8 @@ public class ViewTransition {
                 }
                 startAnimations(views[oldShownView], views[shownView]);
             } else {
+                //把ViewTransition接收的View数组， 放进Views中
+                //shownView（int）是几，就显示该View， 初始化shownView为0
                 for (int i = 0; i < length; i++) {
                     View v = views[i];
                     if (i == shownView) {
