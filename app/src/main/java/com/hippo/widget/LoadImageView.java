@@ -91,6 +91,7 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
 
     @SuppressWarnings("WrongConstant")
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        //TypedArray 获取自定义属性都值
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoadImageView, defStyleAttr, defStyleRes);
         setRetryType(a.getInt(R.styleable.LoadImageView_retryType, 0));
         a.recycle();

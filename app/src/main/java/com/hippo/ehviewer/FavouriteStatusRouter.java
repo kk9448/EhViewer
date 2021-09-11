@@ -59,6 +59,7 @@ public class FavouriteStatusRouter {
   }
 
   public void addListener(Listener listener) {
+    //  private List<Listener> listeners = new ArrayList<>();
     listeners.add(listener);
   }
 
