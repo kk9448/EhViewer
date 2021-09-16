@@ -94,8 +94,10 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
         //TypedArray 获取自定义属性都值
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoadImageView, defStyleAttr, defStyleRes);
         setRetryType(a.getInt(R.styleable.LoadImageView_retryType, 0));
+        //回收TypedArray
         a.recycle();
 
+        //如果不是在EditMode中， 返回一个Conaco实例
         if (!isInEditMode()) {
             mConaco = EhApplication.getConaco(context);
         }

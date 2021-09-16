@@ -22,7 +22,9 @@ package com.hippo.content;
 
 import android.app.Activity;
 import android.os.Bundle;
+
 import com.hippo.scene.SceneApplication;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -57,19 +59,24 @@ public abstract class RecordingApplication extends SceneApplication {
       }
 
       @Override
-      public void onActivityStarted(Activity activity) {}
+      public void onActivityStarted(Activity activity) {
+      }
 
       @Override
-      public void onActivityResumed(Activity activity) {}
+      public void onActivityResumed(Activity activity) {
+      }
 
       @Override
-      public void onActivityPaused(Activity activity) {}
+      public void onActivityPaused(Activity activity) {
+      }
 
       @Override
-      public void onActivityStopped(Activity activity) {}
+      public void onActivityStopped(Activity activity) {
+      }
 
       @Override
-      public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+      public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+      }
     });
   }
 

@@ -45,6 +45,11 @@ public class MSQLiteBuilder {
     JAVA_TYPE_TO_SQLITE_TYPE.put(String.class, "TEXT");
   }
 
+  private int version = 0;
+  private List<String> statements;
+  //android为<Integer, Object>的HashMap专门写的类，key必须为int， 避免了自动装箱
+  private SparseArray<List<String>> statementsMap = new SparseArray<>();
+
   private static String javaTypeToSQLiteType(Class clazz) {
     String type = JAVA_TYPE_TO_SQLITE_TYPE.get(clazz);
     if (type == null) {
@@ -53,11 +58,7 @@ public class MSQLiteBuilder {
     return type;
   }
 
-  private int version = 0;
-  private List<String> statements;
 
-  //android为<Integer, Object>的HashMap专门写的类，key必须为int， 避免了自动装箱
-  private SparseArray<List<String>> statementsMap = new SparseArray<>();
 
   /**
    * Bump database version.

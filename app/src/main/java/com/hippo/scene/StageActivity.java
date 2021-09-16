@@ -190,6 +190,7 @@ public abstract class StageActivity extends EhActivity {
                     Announcer announcer = getLaunchAnnouncer();
                     if (announcer != null) {
                         //announcer中包含了启动名称的.class
+                        //第一次启动应用时为检测顺序
                         //class为GalleryListScene.class
                         startScene(announcer);
                         return;

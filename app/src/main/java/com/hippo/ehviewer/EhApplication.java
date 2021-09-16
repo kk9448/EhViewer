@@ -175,9 +175,9 @@ public class EhApplication extends RecordingApplication {
             EhDB.mergeOldDB(this);
         }
 
-        if (Settings.getEnableAnalytics()) {
-            Analytics.start(this);
-        }
+//        if (Settings.getEnableAnalytics()) {
+//            Analytics.start(this);
+//        }
 
         // Do io tasks in new thread
         new AsyncTask<Void, Void, Void>() {

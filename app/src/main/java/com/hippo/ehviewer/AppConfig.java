@@ -17,8 +17,11 @@
 package com.hippo.ehviewer;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
 import com.hippo.ehviewer.client.exception.ParseException;
 import com.hippo.util.ReadableTime;
 import com.hippo.yorozuya.FileUtils;
@@ -27,6 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class AppConfig {
 
@@ -141,6 +145,7 @@ public class AppConfig {
         return FileUtils.createTempFile(getTempDir(), null);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void saveParseErrorBody(ParseException e) {
         File dir = getExternalParseErrorDir();
         if (null == dir) {
@@ -154,11 +159,13 @@ public class AppConfig {
             String message = e.getMessage();
             String body = e.getBody();
             if (null != message) {
-                os.write(message.getBytes("utf-8"));
+//                os.write(message.getBytes("utf-8"));
+                os.write(message.getBytes(StandardCharsets.UTF_8));
                 os.write('\n');
             }
             if (null != body) {
-                os.write(body.getBytes("utf-8"));
+//                os.write(body.getBytes("utf-8"));
+                os.write(message.getBytes(StandardCharsets.UTF_8));
             }
             os.flush();
         } catch (IOException e1) {

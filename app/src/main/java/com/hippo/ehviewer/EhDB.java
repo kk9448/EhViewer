@@ -426,6 +426,7 @@ public class EhDB {
 
     @NonNull
     public static synchronized List<DownloadLabel> getAllDownloadLabelList() {
+        //EhApplication中初始化了EhDB， 初始化EhDB的时候，初始化了EhSession
         DownloadLabelDao dao = sDaoSession.getDownloadLabelDao();
         return dao.queryBuilder().orderAsc(DownloadLabelDao.Properties.Time).list();
     }

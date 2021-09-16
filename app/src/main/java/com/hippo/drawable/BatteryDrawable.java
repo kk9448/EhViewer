@@ -28,17 +28,19 @@ import com.hippo.yorozuya.MathUtils;
 
 public class BatteryDrawable extends Drawable {
 
+    public static final int WARN_LIMIT = 15;
     @SuppressWarnings("unused")
     private static final String TAG = BatteryDrawable.class.getSimpleName();
 
-    public static final int WARN_LIMIT = 15;
 
-    private int mColor = Color.WHITE;
-    private int mWarningColor = Color.RED;
-    private int mElect = -1;
+
+
     private final Paint mPaint;
 
     private final Rect mTopRect;
+    private int mColor = Color.WHITE;
+    private int mWarningColor = Color.RED;
+    private int mElect = -1;
     private final Rect mBottomRect;
     private final Rect mRightRect;
     private final Rect mHeadRect;

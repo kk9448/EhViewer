@@ -19,7 +19,9 @@ package com.hippo.drawable;
 import android.graphics.Bitmap;
 import android.util.Log;
 import androidx.annotation.Nullable;
+
 import java.lang.ref.WeakReference;
+
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -58,6 +58,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
     // All download info list
     private final LinkedList<DownloadInfo> mAllInfoList;
     // All download info map
+    // SparseJLArray当成SparseArray用
     private final SparseJLArray<DownloadInfo> mAllInfoMap;
     // label and info list map, without default label info list
     private final Map<String, LinkedList<DownloadInfo>> mMap;
@@ -88,6 +89,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         //DownnLoadLabel为greenDao生成文件
         //entity.addStringProperty("label");
         //entity.addLongProperty("time").notNull();
+        //EhApplication中初始化了EhDB
         List<DownloadLabel> labels = EhDB.getAllDownloadLabelList();
         mLabelList = labels;
 

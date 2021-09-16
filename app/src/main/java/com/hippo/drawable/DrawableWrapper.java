@@ -23,6 +23,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -41,13 +42,14 @@ public class DrawableWrapper extends Drawable implements Drawable.Callback {
     this.mDrawable.setBounds(bounds);
   }
 
+  public int getChangingConfigurations() {
+    return this.mDrawable.getChangingConfigurations();
+  }
+
   public void setChangingConfigurations(int configs) {
     this.mDrawable.setChangingConfigurations(configs);
   }
 
-  public int getChangingConfigurations() {
-    return this.mDrawable.getChangingConfigurations();
-  }
 
   public void setDither(boolean dither) {
     this.mDrawable.setDither(dither);
@@ -135,12 +137,12 @@ public class DrawableWrapper extends Drawable implements Drawable.Callback {
     return this.mDrawable.setLevel(level);
   }
 
-  public void setAutoMirrored(boolean mirrored) {
-    DrawableCompat.setAutoMirrored(this.mDrawable, mirrored);
-  }
-
   public boolean isAutoMirrored() {
     return DrawableCompat.isAutoMirrored(this.mDrawable);
+  }
+
+  public void setAutoMirrored(boolean mirrored) {
+    DrawableCompat.setAutoMirrored(this.mDrawable, mirrored);
   }
 
   public void setTint(int tint) {
