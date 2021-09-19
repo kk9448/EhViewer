@@ -148,7 +148,7 @@ public final class MainActivity extends StageActivity
             case Settings.THEME_LIGHT:
             default:
                 return R.style.AppTheme_Main;
-            case Settings.THEME_DARK:
+            case Settings.THEME_SYSTEM:
                 return R.style.AppTheme_Main_Dark;
             case Settings.THEME_BLACK:
                 return R.style.AppTheme_Main_Black;
