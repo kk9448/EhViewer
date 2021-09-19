@@ -90,8 +90,6 @@ public class Settings {
     }
 
     public static int getInt(String key, int defValue) {
-        //sSettingsPre 为 SharedPreferences
-        //从中找到key对应的值，没有就返回默认值
         try {
             return sSettingsPre.getInt(key, defValue);
         } catch (ClassCastException e) {

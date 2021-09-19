@@ -61,9 +61,6 @@ public class GalleryInfo implements Parcelable {
     };
 
     public static final Pattern[] S_LANG_PATTERNS = {
-
-            //[eng]/[english]/(eng)/(english)/英訳
-            //第一个[为java pattern包的要求，表示出[需要使用\\[
             Pattern.compile("[(\\[]eng(?:lish)?[)\\]]|英訳", Pattern.CASE_INSENSITIVE),
             // [(（\[]ch(?:inese)?[)）\]]|[汉漢]化|中[国國][语語]|中文|中国翻訳
             Pattern.compile("[(\uFF08\\[]ch(?:inese)?[)\uFF09\\]]|[汉漢]化|中[国國][语語]|中文|中国翻訳", Pattern.CASE_INSENSITIVE),
@@ -98,10 +95,6 @@ public class GalleryInfo implements Parcelable {
         "language:dutch",
     };
 
-
-    //https://e-hentai.org/g/1977014/f2585201fd/
-    // gid = 1977014
-    //token = f2585201fd
     public long gid ;
     public String token;
     public String title;
@@ -132,7 +125,6 @@ public class GalleryInfo implements Parcelable {
     public String favoriteName;
 
     public final void generateSLang() {
-        //simpleTags是一个string[]
         if (simpleTags != null) {
             generateSLangFromTags();
         }
@@ -143,8 +135,6 @@ public class GalleryInfo implements Parcelable {
 
     private void generateSLangFromTags() {
         for (String tag : simpleTags) {
-            //S_LANGS是储存所有语言的String[] "EN"
-            //S_LANG_TAGS string[] 每个值类似 "language:english",
             for (int i = 0; i < S_LANGS.length; i++) {
                 if (S_LANG_TAGS[i].equals(tag)) {
                     simpleLanguage = S_LANGS[i];

@@ -81,23 +81,17 @@ public class ContentLayout extends FrameLayout {
     }
 
     private void init(Context context) {
-        //此处确定View为widget_content_layout
         LayoutInflater.from(context).inflate(R.layout.widget_content_layout, this);
 
-        //上文确定View为widget_content_layout
-        //R.id.progress为中间圆圈
         mProgressView = (ProgressView) findViewById(R.id.progress);
-        //tip为中间显示文字
         mTipView = (TextView) findViewById(R.id.tip);
-        //content_view里装的是refresh_layout
         mContentView = (ViewGroup) findViewById(R.id.content_view);
-        //RefreshLayout 是基于 android.support.v4.widget.SwipeRefreshLayout。用户可以通过上下滑动来刷新数据或者加载更多数据。
+
         mRefreshLayout = (RefreshLayout) mContentView.findViewById(R.id.refresh_layout);
         mFastScroller = (FastScroller) mContentView.findViewById(R.id.fast_scroller);
         mRecyclerView = (EasyRecyclerView) mRefreshLayout.findViewById(R.id.recycler_view);
 
         mFastScroller.attachToRecyclerView(mRecyclerView);
-        //文字相关设置
         HandlerDrawable drawable = new HandlerDrawable();
         drawable.setColor(AttrResources.getAttrColor(context, R.attr.widgetColorThemeAccent));
         mFastScroller.setHandlerDrawable(drawable);

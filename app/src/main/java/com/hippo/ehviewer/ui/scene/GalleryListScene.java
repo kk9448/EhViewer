@@ -213,13 +213,6 @@ public final class GalleryListScene extends BaseScene
         }
     };
 
-    /**
-    *     private final static int STATE_NORMAL = 0;
-     *     private final static int STATE_SIMPLE_SEARCH = 1;
-     *     private final static int STATE_SEARCH = 2;
-     *     private final static int STATE_SEARCH_SHOW_LIST = 3;
-    * */
-
     @State
     private int mState = STATE_NORMAL;
 
@@ -511,7 +504,6 @@ public final class GalleryListScene extends BaseScene
     }
 
     private String wrapTagKeyword(String keyword) {
-        //删除字符串头尾的空白
         keyword = keyword.trim();
 
         int index1 = keyword.indexOf(':');
@@ -535,31 +527,22 @@ public final class GalleryListScene extends BaseScene
     // Update search bar title, drawer checked item
     private void onUpdateUrlBuilder() {
         ListUrlBuilder builder = mUrlBuilder;
-        //得到Android的自带类Resource
-        //该类extends类BaseScence.java, getResource2()为BaseScene中的方法
         Resources resources = getResources2();
         if (resources == null || builder == null || mSearchLayout == null) {
             return;
         }
 
-        // builder的默认Keyword是null
         String keyword = builder.getKeyword();
-        //默认的category为EhUtils.NONE为-1
         int category = builder.getCategory();
 
         // Update normal search mode
-        // 新建的builder中的getMode（）， 返回builder中的mMode（默认是MODE_NORMAL）， 和static中的MODE_SUBSCRIPTION
-        // 返回的是search_subscription_search的id或者search_normal_search的id
         mSearchLayout.setNormalSearchMode(builder.getMode() == ListUrlBuilder.MODE_SUBSCRIPTION
                 ? R.id.search_subscription_search
                 : R.id.search_normal_search);
 
         // Update search edit text
-        // TextUtils是系统自带函数
         if (!TextUtils.isEmpty(keyword) && null != mSearchBar) {
-            //MODE_TAG = 0x2; public static final int
             if (builder.getMode() == ListUrlBuilder.MODE_TAG) {
-                //wrapTagKeyword(), 如果只有一个标签female:lolicon,则直接返回，否则第二个加""
                 keyword = wrapTagKeyword(keyword);
             }
             mSearchBar.setText(keyword);
@@ -607,10 +590,7 @@ public final class GalleryListScene extends BaseScene
         mShowActionFab = true;
 
 
-        //不同的view下， 可以有不同的id
         View mainLayout = ViewUtils.$$(view, R.id.main_layout);
-        //View为scene_gallery_list
-        //$$相当于findViewById， 只不过多了抛出条件
         ContentLayout contentLayout = (ContentLayout) ViewUtils.$$(mainLayout, R.id.content_layout);
         mRecyclerView = contentLayout.getRecyclerView();
         FastScroller fastScroller = contentLayout.getFastScroller();
@@ -647,8 +627,6 @@ public final class GalleryListScene extends BaseScene
 
         mLeftDrawable = new DrawerArrowDrawable(context, AttrResources.getAttrColor(context, R.attr.drawableColorPrimary));
         mRightDrawable = new AddDeleteDrawable(context, AttrResources.getAttrColor(context, R.attr.drawableColorPrimary));
-        //设置左面的bar和右边的bar
-        //原理是在左面的View上设置， 和在右边的View上设置
         mSearchBar.setLeftDrawable(mLeftDrawable);
         mSearchBar.setRightDrawable(mRightDrawable);
         mSearchBar.setHelper(this);
@@ -675,11 +653,9 @@ public final class GalleryListScene extends BaseScene
         mSearchBarMover = new SearchBarMover(this, mSearchBar, mRecyclerView, mSearchLayout);
 
         // Update list url builder
-        // onUpdateUrlBuilder()在onCreateView2的上方
         onUpdateUrlBuilder();
 
         // Restore state
-        //mState = STATE_NORMAL
         //STATE_NORMAL = 0；
         int newState = mState;
         mState = STATE_NORMAL;

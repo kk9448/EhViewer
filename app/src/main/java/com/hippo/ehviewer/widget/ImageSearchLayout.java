@@ -87,17 +87,10 @@ public final class ImageSearchLayout extends LinearLayout implements View.OnClic
 
         mPreview = (ImageView) ViewUtils.$$(this, R.id.preview);
         mSelectImage = ViewUtils.$$(this, R.id.select_image);
-
-        //单选卡 use similarity image
         mSearchUSS = (CheckBox) ViewUtils.$$(this, R.id.search_uss);
-
-        //单选卡 only search cover
         mSearchOSC = (CheckBox) ViewUtils.$$(this, R.id.search_osc);
-
-        //单选卡 show expunged
         mSearchSE = (CheckBox) ViewUtils.$$(this, R.id.search_se);
 
-        //该this类需要实现onClick();
         mSelectImage.setOnClickListener(this);
     }
 

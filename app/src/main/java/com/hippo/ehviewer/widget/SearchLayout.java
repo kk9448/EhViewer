@@ -169,8 +169,6 @@ public class SearchLayout extends EasyRecyclerView implements CompoundButton.OnC
     }
 
     public void setNormalSearchMode(int id) {
-        //mNormalSearchMode 为 RadioGridGroup类
-        //返回的是R.id.search_subscription_search的id或者R.id.search_normal_search的id
         mNormalSearchMode.check(id);
     }
 

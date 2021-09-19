@@ -25,27 +25,7 @@
     <com.hippo.widget.ContentLayout
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.hippo.widget.FabLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingRight="@dimen/corner_fab_margin"
-            android:paddingBottom="@dimen/corner_fab_margin">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/search_fab"
-                style="@style/Widget.Design.FloatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:visibility="visible"
-                app:backgroundTint="?attr/widgetColorThemeAccent"
-                app:srcCompat="@drawable/v_magnify_dark_x24" />
-
-        </com.hippo.widget.FabLayout>
-    </com.hippo.widget.ContentLayout>
+        android:layout_height="match_parent"/>
 
     <com.hippo.ehviewer.widget.SearchLayout
         android:id="@+id/search_layout"
@@ -91,4 +71,23 @@
 
     </com.hippo.widget.FabLayout>
 
+    <com.hippo.widget.FabLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="@dimen/corner_fab_margin"
+        android:paddingBottom="@dimen/corner_fab_margin">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/v_magnify_dark_x24"
+            app:backgroundTint="?attr/widgetColorThemeAccent"
+            android:visibility="invisible"
+            android:scaleX="0"
+            android:scaleY="0"
+            style="@style/Widget.Design.FloatingActionButton"/>
+
+    </com.hippo.widget.FabLayout>
 </FrameLayout>

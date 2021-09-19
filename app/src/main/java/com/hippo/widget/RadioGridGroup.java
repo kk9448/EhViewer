@@ -117,10 +117,8 @@ public class RadioGridGroup extends SimpleGridLayout {
      * @see #getCheckedRadioButtonId()
      * @see #clearCheck()
      */
-
     public void check(@IdRes int id) {
         // don't even bother
-        // 使用-1来清除selection
         if (id != -1 && (id == mCheckedId)) {
             return;
         }
@@ -146,7 +144,6 @@ public class RadioGridGroup extends SimpleGridLayout {
     private void setCheckedStateForView(int viewId, boolean checked) {
         View checkedView = findViewById(viewId);
         if (checkedView != null && checkedView instanceof RadioButton) {
-            //setChecked为android自带函数， true为选中， false为取消选中， 设置为checked
             ((RadioButton) checkedView).setChecked(checked);
         }
     }

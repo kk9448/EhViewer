@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 //extends ContentLayout.ContentHelper类
-//GalleryInfo并不是greenDao生成的类，自定义类型GalleryInfo implements Parcelable
 public abstract class GalleryInfoContentHelper extends ContentLayout.ContentHelper<GalleryInfo> {
 
   private static final String KEY_DATA_MAP = "data_map";
