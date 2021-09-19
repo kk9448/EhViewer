@@ -28,9 +28,12 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Debug;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.collection.LruCache;
+
 import com.getkeepsafe.relinker.ReLinker;
 import com.hippo.a7zip.A7Zip;
 import com.hippo.a7zip.A7ZipExtractLite;
@@ -58,21 +61,21 @@ import com.hippo.yorozuya.FileUtils;
 import com.hippo.yorozuya.IntIdGenerator;
 import com.hippo.yorozuya.OSUtils;
 import com.hippo.yorozuya.SimpleHandler;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 
 public class EhApplication extends RecordingApplication {
 
+    public static final boolean BETA = false;
     private static final String TAG = EhApplication.class.getSimpleName();
     private static final String KEY_GLOBAL_STUFF_NEXT_ID = "global_stuff_next_id";
-
-    public static final boolean BETA = false;
-
     private static final boolean DEBUG_CONACO = false;
     private static final boolean DEBUG_PRINT_NATIVE_MEMORY = false;
     private static final boolean DEBUG_PRINT_IMAGE_COUNT = false;
@@ -82,6 +85,7 @@ public class EhApplication extends RecordingApplication {
 
     private final IntIdGenerator mIdGenerator = new IntIdGenerator();
     private final HashMap<Integer, Object> mGlobalStuffMap = new HashMap<>();
+    private final List<Activity> mActivityList = new ArrayList<>();
     private EhCookieStore mEhCookieStore;
     private EhClient mEhClient;
     private EhProxySelector mEhProxySelector;
@@ -93,219 +97,10 @@ public class EhApplication extends RecordingApplication {
     private DownloadManager mDownloadManager;
     private Hosts mHosts;
     private FavouriteStatusRouter mFavouriteStatusRouter;
-
-    private final List<Activity> mActivityList = new ArrayList<>();
-
     private boolean initialized = false;
 
     public static EhApplication getInstance() {
         return instance;
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    @Override
-    public void onCreate() {
-        instance = this;
-
-        Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            try {
-                // Always save crash file if onCreate() is not done
-                if (!initialized || Settings.getSaveCrashLog()) {
-                    Crash.saveCrashLog(instance, e);
-                }
-            } catch (Throwable ignored) { }
-
-            if (handler != null) {
-                handler.uncaughtException(t, e);
-            }
-        });
-
-        super.onCreate();
-
-        //GetText类中的的Resources sResources;被初始化
-        GetText.initialize(this);
-        //StatusCodeException类中的SparseArray<String> ERROR_MESSAGE_ARRAY， SparseArray<String> ERROR_MESSAGE_ARRAY 被初始化
-        StatusCodeException.initialize(this);
-        /**
-         * 初始化
-            private static Context sContext;
-            private static SharedPreferences sSettingsPre;
-            private static EhConfig sEhConfig;
-        * */
-        Settings.initialize(this);
-        /**初始化Readable中的
-         * private static Resources sResources;
-         **/
-        ReadableTime.initialize(this);
-        /**初始化Html中的
-         * private static Resources sResources;
-         **/
-        Html.initialize(this);
-        /**初始化Appconfig中的
-         * private static Context sContext;
-         **/
-        AppConfig.initialize(this);
-        /**
-         * 设置LruCache
-         * */
-        SpiderDen.initialize(this);
-        /**
-         *  初始化数据库， 建立daoMaster.newSession();
-         * */
-        EhDB.initialize(this);
-        /**
-         * 从EhDB中， 获得EhFilter， 初始化EhEngine
-         * */
-        EhEngine.initialize();
-
-        /**
-         * 获得BitmapUtils实例（只初始化了context）
-         * */
-        BitmapUtils.initialize(this);
-
-        Image.initialize(this);
-
-        /**
-         * hippo A7Zip
-         * */
-        A7Zip.loadLibrary(A7ZipExtractLite.LIBRARY, libname -> ReLinker.loadLibrary(EhApplication.this, libname));
-
-        if (EhDB.needMerge()) {
-            EhDB.mergeOldDB(this);
-        }
-
-//        if (Settings.getEnableAnalytics()) {
-//            Analytics.start(this);
-//        }
-
-        // Do io tasks in new thread
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                // Check no media file
-                try {
-                    // RawFile extends UniFile, 使用基本的File初始化RawFile
-                    UniFile downloadLocation = Settings.getDownloadLocation();
-                    if (Settings.getMediaScan()) {
-                        //如果允许被扫描， 删除.nomedia
-                        CommonOperations.removeNoMediaFile(downloadLocation);
-                    } else {
-                        //如果不允许被扫描， 生成.nomedia， 保证文件存在
-                        CommonOperations.ensureNoMediaFile(downloadLocation);
-                    }
-                } catch (Throwable t) {
-                    ExceptionUtils.throwIfFatal(t);
-                }
-
-                // Clear temp files
-                try {
-                    clearTempDir();
-                } catch (Throwable t) {
-                    ExceptionUtils.throwIfFatal(t);
-                }
-
-                return null;
-            }
-            //使用。execute(),只单独使用了一个线程， executeOnExecutor使用线程池， 并行
-        }.executeOnExecutor(IoThreadPoolExecutor.getInstance());
-
-        // Check app update
-        update();
-
-        // Update version code
-        try {
-            PackageInfo pi= getPackageManager().getPackageInfo(getPackageName(), 0);
-            Settings.putVersionCode(pi.versionCode);
-        } catch (PackageManager.NameNotFoundException e) {
-            // Ignore
-        }
-
-        mIdGenerator.setNextId(Settings.getInt(KEY_GLOBAL_STUFF_NEXT_ID, 0));
-
-        if (DEBUG_PRINT_NATIVE_MEMORY || DEBUG_PRINT_IMAGE_COUNT) {
-            debugPrint();
-        }
-
-        initialized = true;
-    }
-
-    private void clearTempDir() {
-        //从sharedPreference中取得TempDir
-        File dir = AppConfig.getTempDir();
-        if (null != dir) {
-            FileUtils.deleteContent(dir);
-        }
-        dir = AppConfig.getExternalTempDir();
-        if (null != dir) {
-            FileUtils.deleteContent(dir);
-        }
-        // Add .nomedia to external temp dir
-        CommonOperations.ensureNoMediaFile(UniFile.fromFile(AppConfig.getExternalTempDir()));
-    }
-
-    private void update() {
-        int version = Settings.getVersionCode();
-        if (version < 52) {
-            Settings.putGuideGallery(true);
-        }
-    }
-
-    public void clearMemoryCache() {
-        if (null != mConaco) {
-            mConaco.getBeerBelly().clearMemory();
-        }
-        if (null != mGalleryDetailCache) {
-            mGalleryDetailCache.evictAll();
-        }
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-
-        if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
-            clearMemoryCache();
-        }
-    }
-
-    private void debugPrint() {
-        new Runnable() {
-            @Override
-            public void run() {
-                if (DEBUG_PRINT_NATIVE_MEMORY) {
-                    Log.i(TAG, "Native memory: " + FileUtils.humanReadableByteCount(
-                            Debug.getNativeHeapAllocatedSize(), false));
-                }
-                if (DEBUG_PRINT_IMAGE_COUNT) {
-                    Log.i(TAG, "Image count: " + Image.getImageCount());
-                }
-                SimpleHandler.getInstance().postDelayed(this, DEBUG_PRINT_INTERVAL);
-            }
-        }.run();
-    }
-
-    public int putGlobalStuff(@NonNull Object o) {
-        int id = mIdGenerator.nextId();
-        mGlobalStuffMap.put(id, o);
-        Settings.putInt(KEY_GLOBAL_STUFF_NEXT_ID, mIdGenerator.nextId());
-        return id;
-    }
-
-    public boolean containGlobalStuff(int id) {
-        return mGlobalStuffMap.containsKey(id);
-    }
-
-    public Object getGlobalStuff(int id) {
-        return mGlobalStuffMap.get(id);
-    }
-
-    public Object removeGlobalStuff(int id) {
-        return mGlobalStuffMap.remove(id);
-    }
-
-    public boolean removeGlobalStuff(Object o) {
-        return mGlobalStuffMap.values().removeAll(Collections.singleton(o));
     }
 
     public static EhCookieStore getEhCookieStore(@NonNull Context context) {
@@ -448,6 +243,213 @@ public class EhApplication extends RecordingApplication {
     public static String getDeveloperEmail() {
         return "ehviewersu$gmail.com".replace('$', '@');
     }
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public void onCreate() {
+        instance = this;
+
+        Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            try {
+                // Always save crash file if onCreate() is not done
+                if (!initialized || Settings.getSaveCrashLog()) {
+                    Crash.saveCrashLog(instance, e);
+                }
+            } catch (Throwable ignored) {
+            }
+
+            if (handler != null) {
+                handler.uncaughtException(t, e);
+            }
+        });
+
+        super.onCreate();
+
+        //GetText类中的的Resources sResources;被初始化
+        GetText.initialize(this);
+        //StatusCodeException类中的SparseArray<String> ERROR_MESSAGE_ARRAY， SparseArray<String> ERROR_MESSAGE_ARRAY 被初始化
+        StatusCodeException.initialize(this);
+        /**
+         * 初始化
+            private static Context sContext;
+            private static SharedPreferences sSettingsPre;
+            private static EhConfig sEhConfig;
+        * */
+        Settings.initialize(this);
+        /**初始化Readable中的
+         * private static Resources sResources;
+         **/
+        ReadableTime.initialize(this);
+        /**初始化Html中的
+         * private static Resources sResources;
+         **/
+        Html.initialize(this);
+        /**初始化Appconfig中的
+         * private static Context sContext;
+         **/
+        AppConfig.initialize(this);
+        /**
+         * 设置LruCache
+         * */
+        SpiderDen.initialize(this);
+        /**
+         *  初始化数据库， 建立daoMaster.newSession();
+         * */
+        EhDB.initialize(this);
+        /**
+         * 从EhDB中， 获得EhFilter， 初始化EhEngine
+         * */
+        EhEngine.initialize();
+
+        /**
+         * 获得BitmapUtils实例（只初始化了context）
+         * */
+        BitmapUtils.initialize(this);
+
+        Image.initialize(this);
+
+        /**
+         * hippo A7Zip
+         * */
+        A7Zip.loadLibrary(A7ZipExtractLite.LIBRARY, libname -> ReLinker.loadLibrary(EhApplication.this, libname));
+
+        if (EhDB.needMerge()) {
+            EhDB.mergeOldDB(this);
+        }
+
+        AppCompatDelegate.setDefaultNightMode(Settings.getTheme());
+
+
+        // Do io tasks in new thread
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                // Check no media file
+                try {
+                    // RawFile extends UniFile, 使用基本的File初始化RawFile
+                    UniFile downloadLocation = Settings.getDownloadLocation();
+                    if (Settings.getMediaScan()) {
+                        //如果允许被扫描， 删除.nomedia
+                        CommonOperations.removeNoMediaFile(downloadLocation);
+                    } else {
+                        //如果不允许被扫描， 生成.nomedia， 保证文件存在
+                        CommonOperations.ensureNoMediaFile(downloadLocation);
+                    }
+                } catch (Throwable t) {
+                    ExceptionUtils.throwIfFatal(t);
+                }
+
+                // Clear temp files
+                try {
+                    clearTempDir();
+                } catch (Throwable t) {
+                    ExceptionUtils.throwIfFatal(t);
+                }
+
+                return null;
+            }
+            //使用。execute(),只单独使用了一个线程， executeOnExecutor使用线程池， 并行
+        }.executeOnExecutor(IoThreadPoolExecutor.getInstance());
+
+        // Check app update
+        update();
+
+        // Update version code
+        try {
+            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+            Settings.putVersionCode(pi.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            // Ignore
+        }
+
+        mIdGenerator.setNextId(Settings.getInt(KEY_GLOBAL_STUFF_NEXT_ID, 0));
+
+        if (DEBUG_PRINT_NATIVE_MEMORY || DEBUG_PRINT_IMAGE_COUNT) {
+            debugPrint();
+        }
+
+        initialized = true;
+    }
+
+    private void clearTempDir() {
+        //从sharedPreference中取得TempDir
+        File dir = AppConfig.getTempDir();
+        if (null != dir) {
+            FileUtils.deleteContent(dir);
+        }
+        dir = AppConfig.getExternalTempDir();
+        if (null != dir) {
+            FileUtils.deleteContent(dir);
+        }
+        // Add .nomedia to external temp dir
+        CommonOperations.ensureNoMediaFile(UniFile.fromFile(AppConfig.getExternalTempDir()));
+    }
+
+    private void update() {
+        int version = Settings.getVersionCode();
+        if (version < 52) {
+            Settings.putGuideGallery(true);
+        }
+    }
+
+    public void clearMemoryCache() {
+        if (null != mConaco) {
+            mConaco.getBeerBelly().clearMemory();
+        }
+        if (null != mGalleryDetailCache) {
+            mGalleryDetailCache.evictAll();
+        }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+
+        if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+            clearMemoryCache();
+        }
+    }
+
+    private void debugPrint() {
+        new Runnable() {
+            @Override
+            public void run() {
+                if (DEBUG_PRINT_NATIVE_MEMORY) {
+                    Log.i(TAG, "Native memory: " + FileUtils.humanReadableByteCount(
+                            Debug.getNativeHeapAllocatedSize(), false));
+                }
+                if (DEBUG_PRINT_IMAGE_COUNT) {
+                    Log.i(TAG, "Image count: " + Image.getImageCount());
+                }
+                SimpleHandler.getInstance().postDelayed(this, DEBUG_PRINT_INTERVAL);
+            }
+        }.run();
+    }
+
+    public int putGlobalStuff(@NonNull Object o) {
+        int id = mIdGenerator.nextId();
+        mGlobalStuffMap.put(id, o);
+        Settings.putInt(KEY_GLOBAL_STUFF_NEXT_ID, mIdGenerator.nextId());
+        return id;
+    }
+
+    public boolean containGlobalStuff(int id) {
+        return mGlobalStuffMap.containsKey(id);
+    }
+
+    public Object getGlobalStuff(int id) {
+        return mGlobalStuffMap.get(id);
+    }
+
+    public Object removeGlobalStuff(int id) {
+        return mGlobalStuffMap.remove(id);
+    }
+
+    public boolean removeGlobalStuff(Object o) {
+        return mGlobalStuffMap.values().removeAll(Collections.singleton(o));
+    }
+
 
     public void registerActivity(Activity activity) {
         mActivityList.add(activity);

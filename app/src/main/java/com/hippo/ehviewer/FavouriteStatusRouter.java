@@ -17,8 +17,10 @@
 package com.hippo.ehviewer;
 
 import android.annotation.SuppressLint;
+
 import com.hippo.ehviewer.client.data.GalleryInfo;
 import com.hippo.yorozuya.IntIdGenerator;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

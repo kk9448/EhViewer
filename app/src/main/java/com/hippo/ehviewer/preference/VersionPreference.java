@@ -19,8 +19,10 @@ package com.hippo.ehviewer.preference;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.preference.Preference;
+
 import android.util.AttributeSet;
+
+import android.preference.Preference;
 
 import com.hippo.ehviewer.R;
 

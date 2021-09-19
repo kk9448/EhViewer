@@ -21,9 +21,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.hippo.ehviewer.client.EhConfig;
 import com.hippo.ehviewer.client.EhUtils;
 import com.hippo.ehviewer.client.data.FavListUrlBuilder;
@@ -36,6 +38,7 @@ import com.hippo.yorozuya.AssertUtils;
 import com.hippo.yorozuya.FileUtils;
 import com.hippo.yorozuya.MathUtils;
 import com.hippo.yorozuya.NumberUtils;
+
 import java.io.File;
 import java.util.Locale;
 
@@ -250,10 +253,11 @@ public class Settings {
      ********************/
 
     public static final String KEY_THEME = "theme";
-    public static final int THEME_LIGHT = 0;
-    public static final int THEME_DARK = 1;
+    public static final String KEY_BLACK_DARK_THEME = "black_dark_theme";
+    public static final int THEME_LIGHT = 1;
+    public static final int THEME_SYSTEM = -1;
     public static final int THEME_BLACK = 2;
-    private static final int DEFAULT_THEME = THEME_LIGHT;
+    private static final int DEFAULT_THEME = THEME_SYSTEM;
 
     public static int getTheme() {
         return getIntFromStr(KEY_THEME, DEFAULT_THEME);
@@ -419,6 +423,9 @@ public class Settings {
 
     private static final String KEY_CELLULAR_NETWORK_WARNING = "cellular_network_warning";
     private static final boolean DEFAULT_CELLULAR_NETWORK_WARNING = false;
+    private static final String KEY_NIGHT_MODE = "night_mode";
+    private static final String DEFAULT_NIGHT_MODE = "-1";
+
 
     public static boolean getCellularNetworkWarning() {
         return getBoolean(KEY_CELLULAR_NETWORK_WARNING, DEFAULT_CELLULAR_NETWORK_WARNING);

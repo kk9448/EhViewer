@@ -17,8 +17,10 @@
 package com.hippo.ehviewer;
 
 import android.text.TextUtils;
+
 import com.hippo.network.InetValidator;
 import com.hippo.util.ExceptionUtils;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -100,7 +102,9 @@ public class EhProxySelector extends ProxySelector {
     public List<Proxy> select(URI uri) {
       return Collections.singletonList(Proxy.NO_PROXY);
     }
+
     @Override
-    public void connectFailed(URI uri, SocketAddress sa, IOException ioe) { }
+    public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+    }
   }
 }

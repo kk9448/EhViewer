@@ -47,7 +47,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+
 import com.hippo.android.resource.AttrResources;
 import com.hippo.ehviewer.AppConfig;
 import com.hippo.ehviewer.BuildConfig;
@@ -184,15 +186,7 @@ public class GalleryActivity extends EhActivity implements SeekBar.OnSeekBarChan
 
     @Override
     protected int getThemeResId(int theme) {
-        switch (theme) {
-            case Settings.THEME_LIGHT:
-            default:
-                return R.style.AppTheme_Gallery;
-            case Settings.THEME_DARK:
-                return R.style.AppTheme_Gallery_Dark;
-            case Settings.THEME_BLACK:
-                return R.style.AppTheme_Gallery_Black;
-        }
+        return R.style.AppTheme_Gallery;
     }
 
     private void buildProvider() {
