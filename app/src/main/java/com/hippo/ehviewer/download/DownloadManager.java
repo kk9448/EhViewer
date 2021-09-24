@@ -86,34 +86,20 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         mContext = context;
 
         // Get all labels
-        //DownnLoadLabel为greenDao生成文件
+        //DownLoadLabel为greenDao生成文件
         //entity.addStringProperty("label");
         //entity.addLongProperty("time").notNull();
         //EhApplication中初始化了EhDB
+        //DownloadLabel为下载目录的自定义label
         List<DownloadLabel> labels = EhDB.getAllDownloadLabelList();
         mLabelList = labels;
 
         // Create list for each label
-        /**        DownloadInfo
-         *         entity.addLongProperty("gid").primaryKey().notNull();
-         *         entity.addStringProperty("token");
-         *         entity.addStringProperty("title");
-         *         entity.addStringProperty("titleJpn");
-         *         entity.addStringProperty("thumb");
-         *         entity.addIntProperty("category").notNull();
-         *         entity.addStringProperty("posted");
-         *         entity.addStringProperty("uploader");
-         *         entity.addFloatProperty("rating").notNull();
-         *         entity.addStringProperty("simpleLanguage");
-         *         // DownloadInfo data
-         *         entity.addIntProperty("state").notNull();
-         *         entity.addIntProperty("legacy").notNull();
-         *         entity.addLongProperty("time").notNull();
-         *         entity.addStringProperty("label");
-         * */
         HashMap<String, LinkedList<DownloadInfo>> map = new HashMap<>();
         mMap = map;
+        //labels为downloadLabels的集合
         for (DownloadLabel label : labels) {
+            //DownloadInfo在数据库中为DOWNLOADS， DownloadLabel为DownloadInfo中的一个值
             map.put(label.getLabel(), new LinkedList<DownloadInfo>());
         }
 
@@ -121,10 +107,12 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         mDefaultInfoList = new LinkedList<>();
 
         // Get all info
+        // 遍历数据库，拿到所有的DownloadInfo
         List<DownloadInfo> allInfoList = EhDB.getAllDownloadInfo();
         mAllInfoList = new LinkedList<>(allInfoList);
 
         // Create all info map
+        // allInfoMap放的是<DownloadInfo.gid, DownloadInfo>
         SparseJLArray<DownloadInfo> allInfoMap = new SparseJLArray<>(allInfoList.size() + 10);
         mAllInfoMap = allInfoMap;
 
@@ -135,9 +123,11 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
             allInfoMap.put(info.gid, info);
 
             // Add to each label list
+            // list为从mMap中获取的list
             LinkedList<DownloadInfo> list = getInfoListForLabel(info.label);
             if (list == null) {
                 // Can't find the label in label list
+                // 没有指定自定义下载列表， 则label为null
                 list = new LinkedList<>();
                 map.put(info.label, list);
                 if (!containLabel(info.label)) {
@@ -1122,6 +1112,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         private long mBytesRead;
         private long oldSpeed = -1;
 
+        //SparseIJArray SparseArray优化的是<, Object>, SparseIJArray优化的是<Int, Long>
         private final SparseIJArray mContentLengthMap = new SparseIJArray();
         private final SparseIJArray mReceivedSizeMap = new SparseIJArray();
 

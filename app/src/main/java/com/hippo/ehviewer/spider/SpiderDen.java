@@ -56,9 +56,11 @@ public final class SpiderDen {
     private final long mGid;
 
     @Nullable
+    //SimpleDiskCache的内部是一个LruCache
     private static SimpleDiskCache sCache;
 
     public static void initialize(Context context) {
+        //getReadCacheSize()默认值是160
         sCache = new SimpleDiskCache(new File(context.getCacheDir(), "image"),
                 MathUtils.clamp(Settings.getReadCacheSize(), 40, 640) * 1024 * 1024);
     }
