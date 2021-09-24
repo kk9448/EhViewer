@@ -58,7 +58,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
     // All download info list
     private final LinkedList<DownloadInfo> mAllInfoList;
     // All download info map
-    // SparseJLArray当成SparseArray用
+    // SparseJLArray相当于SparseArray,优化HashMap<Integer，Object>， <int, Object>
     private final SparseJLArray<DownloadInfo> mAllInfoMap;
     // label and info list map, without default label info list
     private final Map<String, LinkedList<DownloadInfo>> mMap;
@@ -132,6 +132,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
                 map.put(info.label, list);
                 if (!containLabel(info.label)) {
                     // Add label to DB and list
+                    // 如果不存在该label，则在EhDB中，增加该label
                     labels.add(EhDB.addDownloadLabel(info.label));
                 }
             }
@@ -157,6 +158,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
             return false;
         }
 
+        // mLabelList为label的合集
         for (DownloadLabel raw: mLabelList) {
             if (label.equals(raw.getLabel())) {
                 return true;
@@ -1112,13 +1114,15 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
         private long mBytesRead;
         private long oldSpeed = -1;
 
-        //SparseIJArray SparseArray优化的是<, Object>, SparseIJArray优化的是<Int, Long>
+        //SparseIJArray SparseArray优化的是HashMap<Integer, Long>, <int, Long>
         private final SparseIJArray mContentLengthMap = new SparseIJArray();
         private final SparseIJArray mReceivedSizeMap = new SparseIJArray();
 
         public void start() {
+            //mStop默认为true
             if (mStop) {
                 mStop = false;
+                //SimpleHandler会直接调用主线程的handler
                 SimpleHandler.getInstance().post(this);
             }
         }
