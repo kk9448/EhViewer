@@ -24,12 +24,15 @@ import java.util.regex.Pattern;
 
 public class GalleryPageParser {
 
+    //返回正则匹配模式
     private static final Pattern PATTERN_IMAGE_URL = Pattern.compile("<img[^>]*src=\"([^\"]+)\" style");
     private static final Pattern PATTERN_SKIP_HATH_KEY = Pattern.compile("onclick=\"return nl\\('([^\\)]+)'\\)");
     private static final Pattern PATTERN_ORIGIN_IMAGE_URL = Pattern.compile("<a href=\"([^\"]+)fullimg.php([^\"]+)\">");
     // TODO Not sure about the size of show keys
     private static final Pattern PATTERN_SHOW_KEY = Pattern.compile("var showkey=\"([0-9a-z]+)\";");
 
+    // Result是4个String组成的class
+    // String imageUrl String skipHathKey String originImageUrl String showKey
     public static Result parse(String body) throws ParseException {
         Matcher m;
         Result result = new Result();

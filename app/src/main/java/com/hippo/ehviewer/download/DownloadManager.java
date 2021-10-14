@@ -1132,8 +1132,10 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
                 mStop = true;
                 mBytesRead = 0;
                 oldSpeed = -1;
+                // mContentLengthMap和mReceivedSizeMap是SparseIJArray， clear()会清除所有
                 mContentLengthMap.clear();
                 mReceivedSizeMap.clear();
+                //Remove any pending posts of Runnable r that are in the message queue.
                 SimpleHandler.getInstance().removeCallbacks(this);
             }
         }
@@ -1160,6 +1162,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
             if (info != null) {
                 long newSpeed = mBytesRead / 2;
                 if (oldSpeed != -1) {
+                    //lerp插值函数， 插入float 0.75
                     newSpeed = (long) MathUtils.lerp(oldSpeed, newSpeed, 0.75f);
                 }
                 oldSpeed = newSpeed;
@@ -1199,6 +1202,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
 
             mBytesRead = 0;
 
+            //默认mStop为true
             if (!mStop) {
                 SimpleHandler.getInstance().postDelayed(this, 2000);
             }

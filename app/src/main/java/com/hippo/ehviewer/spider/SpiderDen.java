@@ -52,6 +52,7 @@ public final class SpiderDen {
      * The UniFile is designed to emulate File interface for both File and Uri.
      */
     private final UniFile mDownloadDir;
+    //MODE_READ = 0
     private volatile int mMode = SpiderQueen.MODE_READ;
     private final long mGid;
 

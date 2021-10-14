@@ -287,6 +287,7 @@ public final class GalleryListScene extends BaseScene
             @Override
             public void onAdd(@NonNull DownloadInfo info, @NonNull List<DownloadInfo> list, int position) {
                 if (mAdapter != null) {
+                    //不刷新activity， 通知activity更新数据
                     mAdapter.notifyDataSetChanged();
                 }
             }

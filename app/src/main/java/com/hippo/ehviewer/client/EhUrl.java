@@ -156,6 +156,7 @@ public class EhUrl {
     }
 
     public static String getPageUrl(long gid, int index, String pToken) {
+        //getHost()， 返回E或者EX的URL
         return getHost() + "s/" + pToken + '/' + gid + '-' + (index + 1);
     }
 

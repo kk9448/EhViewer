@@ -54,6 +54,7 @@ public class SpiderInfo {
         InputStream is = null;
         try {
             is = file.openInputStream();
+            //重载，进入另一个自定义read
             return read(is);
         } catch (IOException e) {
             return null;
@@ -103,6 +104,7 @@ public class SpiderInfo {
         try {
             spiderInfo = new SpiderInfo();
             // Get version
+            //在Hippo的万事屋里，返回String Returns the ASCII characters up to but not including the next "\r\n", or "\n".
             String line = IOUtils.readAsciiLine(is);
             int version = getVersion(line);
             if (version == VERSION) {

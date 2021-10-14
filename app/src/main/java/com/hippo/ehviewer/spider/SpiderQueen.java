@@ -136,6 +136,7 @@ public final class SpiderQueen implements Runnable {
     private volatile Thread mQueenThread;
     private final Object mQueenLock = new Object();
 
+    //DECODE_THREAD_NUM = 1
     private final Thread[] mDecodeThreadArray = new Thread[DECODE_THREAD_NUM];
     private final int[] mDecodeIndexArray = new int[DECODE_THREAD_NUM];
     private final Queue<Integer> mDecodeRequestQueue = new LinkedList<>();
@@ -178,14 +179,18 @@ public final class SpiderQueen implements Runnable {
 
     private SpiderQueen(EhApplication application, @NonNull GalleryInfo galleryInfo) {
         mHttpClient = EhApplication.getOkHttpClient(application);
+        //mSpiderInfoCache是一个SimpleDiskCache（LruCache）如果没有的话，会在/data/data/<Application name>/cache中新建
         mSpiderInfoCache = EhApplication.getSpiderInfoCache(application);
         mGalleryInfo = galleryInfo;
         mSpiderDen = new SpiderDen(mGalleryInfo);
 
+        //getMultiThreadDownload()默认是3
         mWorkerMaxCount = MathUtils.clamp(Settings.getMultiThreadDownload(), 1, 10);
+        //getPreloadImage()默认是5
         mPreloadNumber = MathUtils.clamp(Settings.getPreloadImage(), 0, 100);
 
         for (int i = 0; i < DECODE_THREAD_NUM; i++) {
+            // mDecodeIndexArray[]为int[] INVALID_INDEX = -1
             mDecodeIndexArray[i] = GalleryPageView.INVALID_INDEX;
         }
 
@@ -194,6 +199,7 @@ public final class SpiderQueen implements Runnable {
                 new PriorityThreadFactory(SpiderWorker.class.getSimpleName(), Process.THREAD_PRIORITY_BACKGROUND));
     }
 
+    // OnSpiderListener为一个interface
     public void addOnSpiderListener(OnSpiderListener listener) {
         synchronized (mSpiderListeners) {
             mSpiderListeners.add(listener);
@@ -291,14 +297,18 @@ public final class SpiderQueen implements Runnable {
     @UiThread
     public static SpiderQueen obtainSpiderQueen(@NonNull Context context,
             @NonNull GalleryInfo galleryInfo, @Mode int mode) {
+        //检查是否在主looper中
         OSUtils.checkMainLoop();
 
+        //SparseJLArray<SpiderQueen> sQueenMap
         SpiderQueen queen = sQueenMap.get(galleryInfo.gid);
+        //如果sQueenMap没有该Entry没，则新建该entry
         if (queen == null) {
             EhApplication application = (EhApplication) context.getApplicationContext();
             queen = new SpiderQueen(application, galleryInfo);
             sQueenMap.put(galleryInfo.gid, queen);
             // Set mode
+            //mode MODE_READ = 0, MODE_DOWNLOAD = 1
             queen.setMode(mode);
             queen.start();
         } else {
@@ -452,6 +462,9 @@ public final class SpiderQueen implements Runnable {
 
     private void tryToEnsureWorkers() {
         boolean startWorkers = false;
+        //mRequestPageQueue为Queue<Integer>， Store request page. The index may be invalid
+        //mRequestPageQueue2为Queue<Integer>， Store preload page. The index may be invalid
+        //mForceRequestPageQueue为Queue<Integer>，Store force request page. The index may be invalid
         synchronized (mRequestPageQueue) {
             if (mPageStateArray != null &&
                     (!mForceRequestPageQueue.isEmpty() ||
@@ -676,6 +689,7 @@ public final class SpiderQueen implements Runnable {
     }
 
     private synchronized SpiderInfo readSpiderInfoFromLocal() {
+        //mSpiderInfo为AtomicReference<SpiderInfo>, 是一个原子性的reference
         SpiderInfo spiderInfo = mSpiderInfo.get();
         if (spiderInfo != null) {
             return spiderInfo;
@@ -684,6 +698,8 @@ public final class SpiderQueen implements Runnable {
         // Read from download dir
         UniFile downloadDir = mSpiderDen.getDownloadDir();
         if (downloadDir != null) {
+            //downloadDir为UniFile的子类RawFile
+            //SPIDER_INFO_FILENAME = ".ehviewer";
             UniFile file = downloadDir.findFile(SPIDER_INFO_FILENAME);
             spiderInfo = SpiderInfo.read(file);
             if (spiderInfo != null && spiderInfo.gid == mGalleryInfo.gid &&
@@ -861,7 +877,9 @@ public final class SpiderQueen implements Runnable {
         }
 
         // Setup page state
+        // mPageStateLock是一个Object锁
         synchronized (mPageStateLock) {
+            //mPageStateArray为int[]
             mPageStateArray = new int[spiderInfo.pages];
         }
 
@@ -931,6 +949,7 @@ public final class SpiderQueen implements Runnable {
 
     @Override
     public void run() {
+        //DEBUG_LOG默认是false
         if (DEBUG_LOG) {
             Log.i(TAG, Thread.currentThread().getName() + ": start");
         }
@@ -1022,6 +1041,7 @@ public final class SpiderQueen implements Runnable {
             if (oldPageUrl != null) {
                 pageUrl = oldPageUrl;
             } else {
+                //取得新的URL
                 pageUrl = EhUrl.getPageUrl(gid, index, pToken);
             }
             // Add skipHathKey
