@@ -42,6 +42,8 @@ public class GalleryPageParser {
         }
         m = PATTERN_SKIP_HATH_KEY.matcher(body);
         if (m.find()) {
+            //escape character转义字符
+            //把转义字符换成正常特殊字符 如&amp换成&
             result.skipHathKey = StringUtils.unescapeXml(StringUtils.trim(m.group(1)));
         }
         m = PATTERN_ORIGIN_IMAGE_URL.matcher(body);

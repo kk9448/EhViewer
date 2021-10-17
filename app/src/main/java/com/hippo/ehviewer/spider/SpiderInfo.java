@@ -104,7 +104,7 @@ public class SpiderInfo {
         try {
             spiderInfo = new SpiderInfo();
             // Get version
-            //在Hippo的万事屋里，返回String Returns the ASCII characters up to but not including the next "\r\n", or "\n".
+            //在Hippo的万事屋里，返回String，Returns the ASCII characters up to but not including the next "\r\n", or "\n".
             String line = IOUtils.readAsciiLine(is);
             int version = getVersion(line);
             if (version == VERSION) {
@@ -140,6 +140,7 @@ public class SpiderInfo {
                 return null;
             }
             // PToken
+            // PTokenMap为SparseArray<String>
             spiderInfo.pTokenMap = new SparseArray<>(spiderInfo.pages);
             while (true) { // EOFException will raise
                 line = IOUtils.readAsciiLine(is);

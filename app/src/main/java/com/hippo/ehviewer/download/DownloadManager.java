@@ -80,6 +80,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
     @Nullable
     private SpiderQueen mCurrentSpider;
 
+    //ConcurrentPool内部是一个被synchronized修饰的 T[], T为NotifyTask
     private final ConcurrentPool<NotifyTask> mNotifyTaskPool = new ConcurrentPool<>(5);
 
     public DownloadManager(Context context) {
