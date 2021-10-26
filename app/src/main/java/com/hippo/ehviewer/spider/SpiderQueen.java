@@ -698,8 +698,8 @@ public final class SpiderQueen implements Runnable {
         // Read from download dir
         UniFile downloadDir = mSpiderDen.getDownloadDir();
         if (downloadDir != null) {
-            //downloadDir为UniFile的子类RawFile
-            //SPIDER_INFO_FILENAME = ".ehviewer";
+            // downloadDir为UniFile的子类RawFile
+            // SPIDER_INFO_FILENAME = ".ehviewer";
             UniFile file = downloadDir.findFile(SPIDER_INFO_FILENAME);
             spiderInfo = SpiderInfo.read(file);
             if (spiderInfo != null && spiderInfo.gid == mGalleryInfo.gid &&
@@ -1353,7 +1353,9 @@ public final class SpiderQueen implements Runnable {
         }
 
         // false for stop
+        // 是否跑internal的任务
         private boolean runInternal() {
+            //SpiderInfo里有gid，token，previewPage
             SpiderInfo spiderInfo = mSpiderInfo.get();
             if (spiderInfo == null) {
                 return false;
@@ -1366,6 +1368,11 @@ public final class SpiderQueen implements Runnable {
             // From force request
             boolean force = false;
             synchronized (mRequestPageQueue) {
+                //mRequestPageQueue为普通的request
+                //mRequestPageQueue2为preload
+                // 对index赋值，
+                // 首先判断forceRequest，其次普通的request，之后preload
+                // 最后对index进行赋值
                 if (!mForceRequestPageQueue.isEmpty()) {
                     index = mForceRequestPageQueue.remove();
                     force = true;
@@ -1500,7 +1507,9 @@ public final class SpiderQueen implements Runnable {
             if (DEBUG_LOG) {
                 Log.i(TAG, Thread.currentThread().getName() + ": start");
             }
-
+            // mode_read为0的时候，检测缓存， mode_download检测是否有下载目录，返回为true则ready(),
+            // isInterrupted()为java自带Api，检测线程是否被打断
+            //
             while (mSpiderDen.isReady() && !Thread.currentThread().isInterrupted() && runInternal());
 
             boolean finish;

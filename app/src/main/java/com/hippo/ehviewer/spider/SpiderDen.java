@@ -144,9 +144,12 @@ public final class SpiderDen {
 
     public boolean isReady() {
         switch (mMode) {
+            //MODE_READ = 0， MODE_DOWNLOAD = 1
             case SpiderQueen.MODE_READ:
+                //不等于null，则ready
                 return sCache != null;
             case SpiderQueen.MODE_DOWNLOAD:
+                //有下载目录， 并且下载目录是一个目录
                 return mDownloadDir != null && mDownloadDir.isDirectory();
             default:
                 return false;
@@ -163,6 +166,8 @@ public final class SpiderDen {
             return false;
         }
 
+        //EhCacheKeyFactory是一个String组合器，组成一个String key
+        //sCache是simpleDiskCache
         String key = EhCacheKeyFactory.getImageKey(mGid, index);
         return sCache.contain(key);
     }
