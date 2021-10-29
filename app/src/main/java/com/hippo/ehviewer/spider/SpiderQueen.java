@@ -1398,6 +1398,7 @@ public final class SpiderQueen implements Runnable {
             synchronized (mPageStateLock) {
                 // Check the page state
                 int state = mPageStateArray[index];
+                //force默认为false
                 if (state == STATE_DOWNLOADING || (!force && (state == STATE_FINISHED || state == STATE_FAILED))) {
                     return true;
                 }
@@ -1415,8 +1416,10 @@ public final class SpiderQueen implements Runnable {
             // Clear TOKEN_FAILED for force request
             if (force) {
                 synchronized (mPTokenLock) {
+                    //返回SparseArray中的数组下标
                     int i = spiderInfo.pTokenMap.indexOfKey(index);
                     if (i >= 0) {
+                        //如果没有 token，随便一个数字就能打开一个画廊
                         String pToken = spiderInfo.pTokenMap.valueAt(i);
                         if (SpiderInfo.TOKEN_FAILED.equals(pToken)) {
                             spiderInfo.pTokenMap.remove(i);

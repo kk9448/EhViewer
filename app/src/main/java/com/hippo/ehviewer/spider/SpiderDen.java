@@ -166,8 +166,9 @@ public final class SpiderDen {
             return false;
         }
 
-        //EhCacheKeyFactory是一个String组合器，组成一个String key
-        //sCache是simpleDiskCache
+        // EhCacheKeyFactory是一个String组合器，组成一个String key
+        // return key = "image:" + gid + ":" + index; gid = mGid， index = index
+        // sCache是simpleDiskCache
         String key = EhCacheKeyFactory.getImageKey(mGid, index);
         return sCache.contain(key);
     }
