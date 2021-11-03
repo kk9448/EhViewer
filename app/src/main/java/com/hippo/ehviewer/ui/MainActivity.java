@@ -41,8 +41,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hippo.drawerlayout.DrawerLayout;
@@ -94,6 +92,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
 
 public final class MainActivity extends StageActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -150,7 +149,7 @@ public final class MainActivity extends StageActivity
             case Settings.THEME_LIGHT:
             default:
                 return R.style.AppTheme_Main;
-            case Settings.THEME_SYSTEM:
+            case Settings.THEME_DARK:
                 return R.style.AppTheme_Main_Dark;
             case Settings.THEME_BLACK:
                 return R.style.AppTheme_Main_Black;

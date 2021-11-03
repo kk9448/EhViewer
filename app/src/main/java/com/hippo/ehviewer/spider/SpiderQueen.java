@@ -1419,8 +1419,9 @@ public final class SpiderQueen implements Runnable {
                     //返回SparseArray中的数组下标
                     int i = spiderInfo.pTokenMap.indexOfKey(index);
                     if (i >= 0) {
-                        //如果没有 token，随便一个数字就能打开一个画廊
+                        //如果没有 token，随便一个数字就能打开一个画廊，获取pToken
                         String pToken = spiderInfo.pTokenMap.valueAt(i);
+                        //SpiderInfo.TOKEN_FAILED = "failed"
                         if (SpiderInfo.TOKEN_FAILED.equals(pToken)) {
                             spiderInfo.pTokenMap.remove(i);
                         }
@@ -1459,7 +1460,7 @@ public final class SpiderQueen implements Runnable {
 
             if (pToken == null) {
                 // Interrupted
-                // Get token failed
+                // Get token failed， STATE_FAILED = 3
                 updatePageState(index, STATE_FAILED, "Interrupted");
                 return false;
             }
@@ -1495,7 +1496,7 @@ public final class SpiderQueen implements Runnable {
             }
 
             if (SpiderInfo.TOKEN_FAILED.equals(pToken)) {
-                // Get token failed
+                // Get token failed, STATE_FAILED = 3
                 updatePageState(index, STATE_FAILED, GetText.getString(R.string.error_get_ptoken_error));
                 return true;
             }

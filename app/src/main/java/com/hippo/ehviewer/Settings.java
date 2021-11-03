@@ -252,10 +252,10 @@ public class Settings {
 
     public static final String KEY_THEME = "theme";
     public static final String KEY_BLACK_DARK_THEME = "black_dark_theme";
-    public static final int THEME_LIGHT = 1;
-    public static final int THEME_SYSTEM = -1;
+    public static final int THEME_LIGHT = 0;
+    public static final int THEME_DARK = 1;
     public static final int THEME_BLACK = 2;
-    private static final int DEFAULT_THEME = THEME_SYSTEM;
+    private static final int DEFAULT_THEME = THEME_LIGHT;
 
     public static int getTheme() {
         return getIntFromStr(KEY_THEME, DEFAULT_THEME);

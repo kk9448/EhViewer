@@ -991,6 +991,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
 
         @Override
         public void run() {
+            //mType就是page的当前状态是509还是正在下载，还是已经完成
             switch (mType) {
                 case TYPE_ON_GET_PAGES: {
                     DownloadInfo info = mCurrentTask;
