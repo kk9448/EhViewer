@@ -31,6 +31,8 @@ import com.hippo.yorozuya.AnimationUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+//CoordinatorLayout中有一个behavior，参数必须extends CoordinatorLayout.Behavior
+//@CoordinatorLayout.DefaultBehavior(EhDrawerLayout.Behavior.class)固定关联
 @CoordinatorLayout.DefaultBehavior(EhDrawerLayout.Behavior.class)
 public class EhDrawerLayout extends DrawerLayout {
 
@@ -55,6 +57,7 @@ public class EhDrawerLayout extends DrawerLayout {
         if (null == mAboveSnackViewList) {
             return;
         }
+        //remove list中的view
         mAboveSnackViewList.remove(view);
     }
 

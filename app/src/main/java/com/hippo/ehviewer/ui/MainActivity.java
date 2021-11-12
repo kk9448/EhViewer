@@ -592,6 +592,7 @@ public final class MainActivity extends StageActivity
 
     public void addAboveSnackView(View view) {
         if (mDrawerLayout != null) {
+            //把view加到mAboveSnackViewList(List<View>)中
             mDrawerLayout.addAboveSnackView(view);
         }
     }

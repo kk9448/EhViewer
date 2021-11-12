@@ -584,6 +584,8 @@ public final class GalleryListScene extends BaseScene
         //inflater.inflate() 将XML转换为View布局
         View view = inflater.inflate(R.layout.scene_gallery_list, container, false);
 
+        //GalleryListScene继承了BaseScene，BaseScene继承了SceneFragment， getContext2()返回BaseScene的Context
+        //如果BaseScene的Context为null， 返回SceneFragment的getContext
         Context context = getContext2();
         AssertUtils.assertNotNull(context);
         Resources resources = context.getResources();
@@ -657,8 +659,12 @@ public final class GalleryListScene extends BaseScene
         // Update list url builder
         onUpdateUrlBuilder();
 
-        // Restore state
-        //STATE_NORMAL = 0；
+        /**Restore state
+        STATE_NORMAL = 0；
+        STATE_SIMPLE_SEARCH = 1;
+        STATE_SEARCH = 2;
+        STATE_SEARCH_SHOW_LIST = 3;
+         */
         int newState = mState;
         mState = STATE_NORMAL;
         setState(newState, false);
