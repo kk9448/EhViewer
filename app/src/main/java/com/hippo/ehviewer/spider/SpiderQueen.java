@@ -297,18 +297,18 @@ public final class SpiderQueen implements Runnable {
     @UiThread
     public static SpiderQueen obtainSpiderQueen(@NonNull Context context,
             @NonNull GalleryInfo galleryInfo, @Mode int mode) {
-        //检查是否在主looper中
+        //检查是否在主线程looper中, 不是mainLoop会抛出异常
         OSUtils.checkMainLoop();
 
-        //SparseJLArray<SpiderQueen> sQueenMap
+        //SparseJLArray<SpiderQueen> sQueenMap, map的key为gid
         SpiderQueen queen = sQueenMap.get(galleryInfo.gid);
-        //如果sQueenMap没有该Entry没，则新建该entry
+        //如果sQueenMap没有找到对应的Value，则新建该entry
         if (queen == null) {
             EhApplication application = (EhApplication) context.getApplicationContext();
             queen = new SpiderQueen(application, galleryInfo);
             sQueenMap.put(galleryInfo.gid, queen);
             // Set mode
-            //mode MODE_READ = 0, MODE_DOWNLOAD = 1
+            // mode MODE_READ = 0, MODE_DOWNLOAD = 1
             queen.setMode(mode);
             queen.start();
         } else {
@@ -410,6 +410,9 @@ public final class SpiderQueen implements Runnable {
     }
 
     private void start() {
+        // TAG为SpiderQueen.class.getSimpleName();
+        // sIdGenerator为AtomicInteger(原子性的integer);
+        // THREAD_PRIORITY_BACKGROUND为10
         Thread queenThread = new PriorityThread(this, TAG + '-' + sIdGenerator.incrementAndGet(),
                 Process.THREAD_PRIORITY_BACKGROUND);
         mQueenThread = queenThread;
@@ -689,7 +692,8 @@ public final class SpiderQueen implements Runnable {
     }
 
     private synchronized SpiderInfo readSpiderInfoFromLocal() {
-        //mSpiderInfo为AtomicReference<SpiderInfo>, 是一个原子性的reference
+        //mSpiderInfo为AtomicReference<SpiderInfo>, 相当于一个有原子性的object
+        //get()函数返回的值为SpiderInfo, 返回的是初始化AtomicReference<T>中的T
         SpiderInfo spiderInfo = mSpiderInfo.get();
         if (spiderInfo != null) {
             return spiderInfo;
@@ -951,6 +955,7 @@ public final class SpiderQueen implements Runnable {
     public void run() {
         //DEBUG_LOG默认是false
         if (DEBUG_LOG) {
+            // TAG为SpiderQueen.class.getSimpleName();
             Log.i(TAG, Thread.currentThread().getName() + ": start");
         }
 

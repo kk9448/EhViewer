@@ -107,8 +107,11 @@ public class DownloadService extends Service implements DownloadManager.Download
     public void onCreate() {
         super.onCreate();
 
+        //getPackageName()是系统自带函数， 接口在context.java中，实现在contextWrapper.java中，均为java自带函数
         CHANNEL_ID = getPackageName()+".download";
+        //获取NotificationManager
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //如果sdk版本大于26， NotificationManager.IMPORTANCE_LOW为2
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             mNotifyManager.createNotificationChannel(new NotificationChannel(CHANNEL_ID, getString(R.string.download_service),
                     NotificationManager.IMPORTANCE_LOW));
@@ -149,9 +152,11 @@ public class DownloadService extends Service implements DownloadManager.Download
     private void handleIntent(Intent intent) {
         String action = null;
         if (intent != null) {
+            //使用intent.setAction("")自定义intent中action的值
             action = intent.getAction();
         }
 
+        //ACTION_START为"start"
         if (ACTION_START.equals(action)) {
             GalleryInfo gi = intent.getParcelableExtra(KEY_GALLERY_INFO);
             String label = intent.getStringExtra(KEY_LABEL);
@@ -263,6 +268,7 @@ public class DownloadService extends Service implements DownloadManager.Download
     }
 
     private void ensure509Builder() {
+        //m509dBuilder为NotificationCompat.Builder类
         if (m509dBuilder != null) {
             return;
         }

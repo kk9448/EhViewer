@@ -83,7 +83,7 @@ public class ViewTransition {
             mShownView = shownView;
 
             // Cancel animation
-            //mAnimator1初始化为null
+            // mAnimator1初始化为null
             if (mAnimator1 != null) {
                 mAnimator1.cancel();
             }
@@ -92,7 +92,7 @@ public class ViewTransition {
                 mAnimator2.cancel();
             }
 
-            //初始化为false
+            //animation初始化为false
             //oldShownView为-1
             //更新mShownView为0
             if (animation) {
@@ -110,6 +110,7 @@ public class ViewTransition {
                 for (int i = 0; i < length; i++) {
                     View v = views[i];
                     if (i == shownView) {
+                        //设置View的透明度0为完全透明， 1为完全不透明
                         v.setAlpha(1f);
                         v.setVisibility(View.VISIBLE);
                     } else {
@@ -130,11 +131,13 @@ public class ViewTransition {
     }
 
     private void startAnimations(final View hiddenView, final View shownView) {
+        //动画函数， propertyName为要改变的属性， value只有一个的话， 为最终值，否则为起始到终止
         ObjectAnimator oa1 = ObjectAnimator.ofFloat(hiddenView, "alpha", 0f);
         oa1.setDuration(ANIMATE_TIME);
         oa1.addListener(new SimpleAnimatorListener() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                //View.GONE， view不可见， 不占据布局任何空间
                 hiddenView.setVisibility(View.GONE);
                 mAnimator1 = null;
             }

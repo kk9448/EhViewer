@@ -590,10 +590,11 @@ public final class GalleryListScene extends BaseScene
         AssertUtils.assertNotNull(context);
         Resources resources = context.getResources();
 
+        //ViewConfiguration， android自带函数，获取系统滑动的最小值， 大于该值，可以认为滑动
         mHideActionFabSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mShowActionFab = true;
 
-
+        //当前的view为GalleryListScene，所以是GalleryListScene的main_layout
         View mainLayout = ViewUtils.$$(view, R.id.main_layout);
         ContentLayout contentLayout = (ContentLayout) ViewUtils.$$(mainLayout, R.id.content_layout);
         mRecyclerView = contentLayout.getRecyclerView();

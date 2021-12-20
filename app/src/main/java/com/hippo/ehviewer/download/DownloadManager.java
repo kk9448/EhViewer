@@ -58,7 +58,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
     // All download info list
     private final LinkedList<DownloadInfo> mAllInfoList;
     // All download info map
-    // SparseJLArray相当于SparseArray,优化HashMap<Integer，Object>， <int, Object>
+    // SparseJLArray相当于SparseArray,优化HashMap<Integer，Object>， <int, Object>， int为gallery的gid
     private final SparseJLArray<DownloadInfo> mAllInfoMap;
     // label and info list map, without default label info list
     private final Map<String, LinkedList<DownloadInfo>> mMap;
@@ -222,6 +222,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
 
         // Get download from wait list
         if (!mWaitList.isEmpty()) {
+            //mWaitList是一个LinkedList
             DownloadInfo info = mWaitList.removeFirst();
             SpiderQueen spider = SpiderQueen.obtainSpiderQueen(mContext, info, SpiderQueen.MODE_DOWNLOAD);
             mCurrentTask = info;
@@ -253,6 +254,7 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
     }
 
     void startDownload(GalleryInfo galleryInfo, @Nullable String label) {
+        //mCurrentTask为DownloadInfo类
         if (mCurrentTask != null && mCurrentTask.gid == galleryInfo.gid) {
             // It is current task
             return;
@@ -280,6 +282,8 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
             }
         } else {
             // It is new download info
+            // DownloadInfo extends galleryInfo 增加了 设置和获取 各种属性的函数
+            // 另外还增加了label(下载分类), state(下载状态).time下载时间
             info = new DownloadInfo(galleryInfo);
             info.label = label;
             info.state = DownloadInfo.STATE_WAIT;

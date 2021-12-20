@@ -21,7 +21,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import androidx.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import com.google.android.material.snackbar.Snackbar;

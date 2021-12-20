@@ -61,6 +61,7 @@ public class SearchBarMover extends RecyclerView.OnScrollListener {
             int oldBottom = (int) ViewUtils.getY2(mSearchBar);
             int offsetYStep = MathUtils.clamp(-dy, -oldBottom, -(int) mSearchBar.getTranslationY());
             if (offsetYStep != 0) {
+                //translationYBy， 把View进行偏移
                 ViewUtils.translationYBy(mSearchBar, offsetYStep);
             }
         }

@@ -30,7 +30,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 public class SpiderInfo {
-
+    //下载时所需要的信息
     private static final String TAG = SpiderInfo.class.getSimpleName();
 
     private static final String VERSION_STR = "VERSION";
