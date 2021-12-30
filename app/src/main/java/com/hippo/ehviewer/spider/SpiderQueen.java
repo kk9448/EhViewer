@@ -694,6 +694,7 @@ public final class SpiderQueen implements Runnable {
     private synchronized SpiderInfo readSpiderInfoFromLocal() {
         //mSpiderInfo为AtomicReference<SpiderInfo>, 相当于一个有原子性的object
         //get()函数返回的值为SpiderInfo, 返回的是初始化AtomicReference<T>中的T
+        //SpiderInfo类为下载时所需要的信息
         SpiderInfo spiderInfo = mSpiderInfo.get();
         if (spiderInfo != null) {
             return spiderInfo;

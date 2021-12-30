@@ -606,6 +606,7 @@ public class Settings {
         try {
             Uri.Builder builder = new Uri.Builder();
             /***
+             *  getString()函数,为setting里的自定义函数, 该函数
              *  从SharedPreferences中获取key的值， 没有则设置为null
              */
             builder.scheme(getString(KEY_DOWNLOAD_SAVE_SCHEME, null));
