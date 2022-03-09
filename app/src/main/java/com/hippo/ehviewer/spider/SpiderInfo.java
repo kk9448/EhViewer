@@ -102,9 +102,10 @@ public class SpiderInfo {
 
         SpiderInfo spiderInfo = null;
         try {
+            // SpiderInfo类为下载信息
             spiderInfo = new SpiderInfo();
             // Get version
-            //在Hippo的万事屋里，返回String，Returns the ASCII characters up to but not including the next "\r\n", or "\n".
+            // 在Hippo的万事屋里，返回String，Returns the ASCII characters up to but not including the next "\r\n", or "\n".
             String line = IOUtils.readAsciiLine(is);
             int version = getVersion(line);
             if (version == VERSION) {

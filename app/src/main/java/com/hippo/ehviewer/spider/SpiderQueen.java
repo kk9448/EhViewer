@@ -123,6 +123,7 @@ public final class SpiderQueen implements Runnable {
     private final OkHttpClient mHttpClient;
     @NonNull
     private final SimpleDiskCache mSpiderInfoCache;
+    //SimpleDiskCache是对DiskLruCache的再次封装，方便使用
     @NonNull
     private final GalleryInfo mGalleryInfo;
     @NonNull
@@ -707,6 +708,7 @@ public final class SpiderQueen implements Runnable {
             // SPIDER_INFO_FILENAME = ".ehviewer";
             UniFile file = downloadDir.findFile(SPIDER_INFO_FILENAME);
             spiderInfo = SpiderInfo.read(file);
+            // spiderInfo是下载时所需要的信息，mGalleryInfo是画廊的信息
             if (spiderInfo != null && spiderInfo.gid == mGalleryInfo.gid &&
                     spiderInfo.token.equals(mGalleryInfo.token)) {
                 return spiderInfo;
@@ -714,6 +716,10 @@ public final class SpiderQueen implements Runnable {
         }
 
         // Read from cache
+        // mSpiderInfoCache为SimpleDiskCache类
+        // getInputStreamPipe返回了一个InputStreamPipe，InputStreamPipe是一个自定义类
+        // 返回了一个CacheInputStreamPipe，CacheInputStreamPipe实现了InputStreamPipe（有一个open接口）
+        // CacheInputStreamPipe里有一个DiskLruCache.Snapshot， Snapshot中有getInputStream()可以获取流文件
         InputStreamPipe pipe = mSpiderInfoCache.getInputStreamPipe(Long.toString(mGalleryInfo.gid));
         if (null != pipe) {
             try {

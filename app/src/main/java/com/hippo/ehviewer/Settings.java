@@ -617,7 +617,7 @@ public class Settings {
             /**
              * 返回一个Unifile的子类RawFile， 使用uri初始化file， 用file初始化RawFile
              * */
-            dir = UniFile.fromUri(sContext, builder.build());
+             dir = UniFile.fromUri(sContext, builder.build());
         } catch (Throwable e) {
             ExceptionUtils.throwIfFatal(e);
             // Ignore
