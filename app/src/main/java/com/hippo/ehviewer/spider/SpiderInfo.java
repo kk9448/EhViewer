@@ -86,6 +86,7 @@ public class SpiderInfo {
         if (null == str) {
             return -1;
         }
+        // VERSION_STR = "VERSION"
         if (str.startsWith(VERSION_STR)) {
             return NumberUtils.parseIntSafely(str.substring(VERSION_STR.length()), -1);
         } else {
@@ -106,6 +107,7 @@ public class SpiderInfo {
             spiderInfo = new SpiderInfo();
             // Get version
             // 在Hippo的万事屋里，返回String，Returns the ASCII characters up to but not including the next "\r\n", or "\n".
+            // 正常的inputStream.read()是读取"\r\n", or "\n"的，IOUtils.readAsciiLine会跳过这些符号
             String line = IOUtils.readAsciiLine(is);
             int version = getVersion(line);
             if (version == VERSION) {

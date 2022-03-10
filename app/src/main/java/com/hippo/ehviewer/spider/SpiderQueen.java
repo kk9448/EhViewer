@@ -723,7 +723,10 @@ public final class SpiderQueen implements Runnable {
         InputStreamPipe pipe = mSpiderInfoCache.getInputStreamPipe(Long.toString(mGalleryInfo.gid));
         if (null != pipe) {
             try {
+                //先把counterLock中的ReentrantReadWriteLock中的readLock锁上
+                //再把counterLock的计数器++
                 pipe.obtain();
+                //pipe.open()返回流文件
                 spiderInfo = SpiderInfo.read(pipe.open());
                 if (spiderInfo != null && spiderInfo.gid == mGalleryInfo.gid &&
                         spiderInfo.token.equals(mGalleryInfo.token)) {
