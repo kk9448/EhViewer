@@ -41,6 +41,7 @@ public class SafeCoordinatorLayout extends CoordinatorLayout {
         try {
             return super.onInterceptTouchEvent(ev);
         } catch (Throwable e) {
+            // 3种错误VirtualMachineError，ThreadDeath，LinkageError
             ExceptionUtils.throwIfFatal(e);
             return false;
         }

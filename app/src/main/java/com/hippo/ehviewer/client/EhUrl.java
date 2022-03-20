@@ -145,6 +145,12 @@ public class EhUrl {
     }
 
     public static String getGalleryDetailUrl(long gid, String token, int index, boolean allComment) {
+
+        // getHost()返回HOST_E,
+        // HOST_E = "https://" + DOMAIN_E + "/";
+        // DOMAIN_E = "e-hentai.org";
+        // gid = 2012337(示例)
+        // token = 2417a3be13
         UrlBuilder builder = new UrlBuilder(getHost() + "g/" + gid + '/' + token + '/');
         if (index != 0) {
             builder.addQuery("p", index);

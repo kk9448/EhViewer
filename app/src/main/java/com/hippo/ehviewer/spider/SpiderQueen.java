@@ -720,6 +720,7 @@ public final class SpiderQueen implements Runnable {
         // getInputStreamPipe返回了一个InputStreamPipe，InputStreamPipe是一个自定义类
         // 返回了一个CacheInputStreamPipe，CacheInputStreamPipe实现了InputStreamPipe（有一个open接口）
         // CacheInputStreamPipe里有一个DiskLruCache.Snapshot， Snapshot中有getInputStream()可以获取流文件
+        // 如果缓存中存在该gid， 则返回缓存内容
         InputStreamPipe pipe = mSpiderInfoCache.getInputStreamPipe(Long.toString(mGalleryInfo.gid));
         if (null != pipe) {
             try {

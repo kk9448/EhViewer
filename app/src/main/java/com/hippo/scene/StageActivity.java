@@ -161,24 +161,35 @@ public abstract class StageActivity extends EhActivity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            //从Bundle中获取State ID
+            // 从Bundle中获取State ID, INVALID_ID = -1
+            // KEY_SCENE_TAG_LIST = "stage_activity_scene_tag_list"
             mStageId = savedInstanceState.getInt(KEY_STAGE_ID, IntIdGenerator.INVALID_ID);
+            // 如果bundle中没有该字符串，返回null
             ArrayList<String> list = savedInstanceState.getStringArrayList(KEY_SCENE_TAG_LIST);
             if (list != null) {
+                // SceneTagList为ArrayList<String>
                 mSceneTagList.addAll(list);
+                // ArrayList<String> mDelaySceneTagList
                 mDelaySceneTagList.addAll(list);
             }
+            // mIdGenerator为AtomicInteger lazySet不会立刻改变, 但是性能好， set会立刻改变, 但是性能不好
+            // string KEY_NEXT_ID = "stage_activity_next_id";
             mIdGenerator.lazySet(savedInstanceState.getInt(KEY_NEXT_ID));
         }
 
+        //mStageId默认是INVALID_ID = -1
         if (mStageId == IntIdGenerator.INVALID_ID) {
-            //放在Application中的 SparseArray<StageActivity> mStageMap中
+            // 放在SceneApplication中的 SparseArray<StageActivity> mStageMap中，
+            // 并把StageActivity的mStageId，改为IntIdGenerator
             ((SceneApplication) getApplicationContext()).registerStageActivity(this);
         } else {
+            // 如果mStageId存在，抛出IllegalStateException("The id exists: " + id)异常，
+            // 之后执行registerStageActivity(this)函数相同的内容
             ((SceneApplication) getApplicationContext()).registerStageActivity(this, mStageId);
         }
 
         // Create layout
+        // 执行MainActivity.java中的onCreate2(savedInstanceState)
         onCreate2(savedInstanceState);
         //就算是一开始初始化，intent也不是null
         Intent intent = getIntent();
@@ -189,9 +200,9 @@ public abstract class StageActivity extends EhActivity {
                 if (Intent.ACTION_MAIN.equals(action)) {
                     Announcer announcer = getLaunchAnnouncer();
                     if (announcer != null) {
-                        //announcer中包含了启动名称的.class
-                        //第一次启动应用时为检测顺序
-                        //class为GalleryListScene.class
+                        // announcer中包含了启动名称的.class
+                        // 第一次启动应用时为检测顺序
+                        // class为GalleryListScene.class
                         startScene(announcer);
                         return;
                     }

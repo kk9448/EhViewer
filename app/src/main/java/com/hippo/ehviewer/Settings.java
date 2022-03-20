@@ -143,6 +143,8 @@ public class Settings {
 
     public static int getIntFromStr(String key, int defValue) {
         try {
+            // 从sSettingsPre中先获取key = "theme"的设置， 没有则使用defValue， 如果Value不是String，则抛出异常
+            // parseIntSafely()函数，防止getString()的结果不是一个数字
             return NumberUtils.parseIntSafely(sSettingsPre.getString(key, Integer.toString(defValue)), defValue);
         } catch (ClassCastException e) {
             Log.d(TAG, "Get ClassCastException when get " + key + " value", e);
@@ -258,6 +260,7 @@ public class Settings {
     private static final int DEFAULT_THEME = THEME_LIGHT;
 
     public static int getTheme() {
+        // KEY_THEME = "theme"；DEFAULT_THEME = 0（白色主题）
         return getIntFromStr(KEY_THEME, DEFAULT_THEME);
     }
 
@@ -269,6 +272,8 @@ public class Settings {
     private static final boolean DEFAULT_APPLY_NAV_BAR_THEME_COLOR = true;
 
     public static boolean getApplyNavBarThemeColor() {
+        // String KEY_APPLY_NAV_BAR_THEME_COLOR = "apply_nav_bar_theme_color";
+        // DEFAULT_APPLY_NAV_BAR_THEME_COLOR = true; 导航条默认跟随主题颜色
         return getBoolean(KEY_APPLY_NAV_BAR_THEME_COLOR, DEFAULT_APPLY_NAV_BAR_THEME_COLOR);
     }
 

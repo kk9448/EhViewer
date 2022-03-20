@@ -43,13 +43,17 @@ public abstract class EhActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        // 把Activity放入一个List<Activity>中
         ((EhApplication) getApplication()).registerActivity(this);
 
         if (Analytics.isEnabled()) {
             FirebaseAnalytics.getInstance(this);
         }
 
+        // LOLLIPOP为Android 5.0, getApplyNavBarThemeColor(), 设置下方的导航条颜色是否跟随主题
+        // 如果大于5.0并且跟随主题颜色， 则执行下方语句
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Settings.getApplyNavBarThemeColor()) {
+            //设置导航条的颜色为
             getWindow().setNavigationBarColor(AttrResources.getAttrColor(this, R.attr.colorPrimaryDark));
         }
     }
