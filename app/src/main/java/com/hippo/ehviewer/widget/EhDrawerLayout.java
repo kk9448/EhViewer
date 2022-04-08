@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //CoordinatorLayout中有一个behavior，参数必须extends CoordinatorLayout.Behavior
-//@CoordinatorLayout.DefaultBehavior(EhDrawerLayout.Behavior.class)固定关联
+//@CoordinatorLayout.DefaultBehavior(EhDrawerLayout.Behavior.class)它通过注解设置了自己的默认Behavior
 @CoordinatorLayout.DefaultBehavior(EhDrawerLayout.Behavior.class)
 public class EhDrawerLayout extends DrawerLayout {
 
@@ -74,11 +74,15 @@ public class EhDrawerLayout extends DrawerLayout {
         }
     }
 
+    //为了和CoordinatorLayout进行互动，需要有Behavior类
     public static class Behavior extends CoordinatorLayout.Behavior<EhDrawerLayout> {
         // We only support the FAB <> Snackbar shift movement on Honeycomb and above. This is
         // because we can use view translation properties which greatly simplifies the code.
         private static final boolean SNACKBAR_BEHAVIOR_ENABLED = Build.VERSION.SDK_INT >= 11;
 
+
+        //layoutDependsOn()函数, 返回boolean, 用来监测被观察者(一个View)的类型
+        //onDependentViewChanged(), 如果该被观察者发生改变,则执行的语句
         @Override
         public boolean layoutDependsOn(CoordinatorLayout parent,
                                        EhDrawerLayout child, View dependency) {

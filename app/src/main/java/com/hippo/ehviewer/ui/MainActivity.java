@@ -122,6 +122,11 @@ public final class MainActivity extends StageActivity
 
     private int mNavCheckedItem = 0;
 
+    //LAUNCH_MODE_STANDARD： 栈中ABCD， 再次创建D，栈中ABCDD
+    //LAUNCH_MODE_SINGLE_TOP ： 栈中ABCD， 再次创建D，栈中ABCD，不会再次创建D
+    //如果再次创建的是B，则ABCDB
+    //LAUNCH_MODE_SINGLE_TASK ：栈中ABCD，D->B,销毁CD， 只剩AB
+
     static {
         registerLaunchMode(SecurityScene.class, SceneFragment.LAUNCH_MODE_SINGLE_TASK);
         registerLaunchMode(WarningScene.class, SceneFragment.LAUNCH_MODE_SINGLE_TASK);
@@ -349,6 +354,7 @@ public final class MainActivity extends StageActivity
         updateProfile();
 
         if (mNavView != null) {
+            //设置点击事件，MainActivity复写了onNavigationItemSelected（）这个点击函数
             mNavView.setNavigationItemSelectedListener(this);
         }
 
@@ -691,6 +697,7 @@ public final class MainActivity extends StageActivity
         }
     }
 
+    //NavigationView（侧边栏的点击事件）
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Don't select twice
@@ -702,6 +709,7 @@ public final class MainActivity extends StageActivity
 
         if (id == R.id.nav_homepage) {
             Bundle args = new Bundle();
+            //KEY_ACTION = "action"， ACTION_HOMEPAGE = "action_homepage"
             args.putString(GalleryListScene.KEY_ACTION, GalleryListScene.ACTION_HOMEPAGE);
             startSceneFirstly(new Announcer(GalleryListScene.class)
                     .setArgs(args));

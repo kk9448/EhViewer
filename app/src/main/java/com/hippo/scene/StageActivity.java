@@ -261,6 +261,7 @@ public abstract class StageActivity extends EhActivity {
     }
 
     public int getSceneLaunchMode(Class<?> clazz) {
+        //Map<Class<?>, Integer> sLaunchModeMap
         Integer integer = sLaunchModeMap.get(clazz);
         if (integer == null) {
             throw new RuntimeException("Not register " + clazz.getName());
@@ -431,18 +432,22 @@ public abstract class StageActivity extends EhActivity {
         Class<?> clazz = announcer.clazz;
         Bundle args = announcer.args;
         FragmentManager fragmentManager = getSupportFragmentManager();
+        //从Map中获取class对应的int
         int launchMode = getSceneLaunchMode(clazz);
+        //LAUNCH_MODE_STANDARD = 0
         boolean forceNewScene = launchMode == SceneFragment.LAUNCH_MODE_STANDARD;
         boolean createNewScene = true;
         boolean findScene = false;
         SceneFragment scene = null;
 
+        //beginTransaction()并没有执行， commit()才是执行
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         // Set default animation
         transaction.setCustomAnimations(R.anim.scene_open_enter, R.anim.scene_open_exit);
 
         String findSceneTag = null;
+        //ArrayList<String> mSceneTagList
         for (int i = 0, n = mSceneTagList.size(); i < n; i++) {
             String tag = mSceneTagList.get(i);
             Fragment fragment = fragmentManager.findFragmentByTag(tag);
