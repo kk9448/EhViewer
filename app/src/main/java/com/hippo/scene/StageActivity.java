@@ -457,6 +457,7 @@ public abstract class StageActivity extends EhActivity {
             }
 
             // Clear shared element
+            //把共享元素（不同Activity中，使用的相同元素）的过渡动画设置为空
             fragment.setSharedElementEnterTransition(null);
             fragment.setSharedElementReturnTransition(null);
             fragment.setEnterTransition(null);
