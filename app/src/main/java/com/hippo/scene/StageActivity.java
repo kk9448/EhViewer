@@ -444,6 +444,7 @@ public abstract class StageActivity extends EhActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         // Set default animation
+        // 自定义动画，都是以XML文件的形式存在， 参数为XML文件所在的ID
         transaction.setCustomAnimations(R.anim.scene_open_enter, R.anim.scene_open_exit);
 
         String findSceneTag = null;
@@ -464,6 +465,7 @@ public abstract class StageActivity extends EhActivity {
             fragment.setExitTransition(null);
 
             // Check is target scene
+            // clazz.isInstance(fragment)，启动的这个Announcer，如果是fragment
             if (!forceNewScene && !findScene && clazz.isInstance(fragment) &&
                     (launchMode == SceneFragment.LAUNCH_MODE_SINGLE_TASK || !fragment.isDetached())) {
                 scene = (SceneFragment) fragment;
