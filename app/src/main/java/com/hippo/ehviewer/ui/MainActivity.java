@@ -354,7 +354,7 @@ public final class MainActivity extends StageActivity
         updateProfile();
 
         if (mNavView != null) {
-            //设置点击事件，MainActivity复写了onNavigationItemSelected（）这个点击函数
+            //设置点击事件，MainActivity复写了onNavigationItemSelected()这个点击函数
             mNavView.setNavigationItemSelectedListener(this);
         }
 

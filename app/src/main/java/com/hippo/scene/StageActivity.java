@@ -96,7 +96,8 @@ public abstract class StageActivity extends EhActivity {
      * @return {@code true} for start scene
      */
     private boolean startSceneFromIntent(Intent intent) {
-        //getStringExtra获得intent中的附加信息
+        // getStringExtra获得intent中的附加信息
+        // String KEY_SCENE_NAME = "stage_activity_scene_name";
         String clazzStr = intent.getStringExtra(KEY_SCENE_NAME);
         if (null == clazzStr) {
             return false;
@@ -110,8 +111,10 @@ public abstract class StageActivity extends EhActivity {
             return false;
         }
 
+        // string KEY_SCENE_ARGS = "stage_activity_scene_args";
         Bundle args = intent.getBundleExtra(KEY_SCENE_ARGS);
 
+        //返回了一个设置了Args的Announcer
         Announcer announcer = onStartSceneFromIntent(clazz, args);
         if (announcer == null) {
             return false;
@@ -324,6 +327,7 @@ public abstract class StageActivity extends EhActivity {
                             continue;
                         }
                         // Clear shared element
+                        // 把共享元素（不同Activity中，使用的相同元素）的过渡动画设置为空
                         topFragment.setSharedElementEnterTransition(null);
                         topFragment.setSharedElementReturnTransition(null);
                         topFragment.setEnterTransition(null);
@@ -438,6 +442,7 @@ public abstract class StageActivity extends EhActivity {
         //从Map中获取class对应的int
         int launchMode = getSceneLaunchMode(clazz);
         //LAUNCH_MODE_STANDARD = 0
+        // 如果该类的class的启动类型是standard，则forceNewScene为true
         boolean forceNewScene = launchMode == SceneFragment.LAUNCH_MODE_STANDARD;
         boolean createNewScene = true;
         boolean findScene = false;
@@ -461,19 +466,24 @@ public abstract class StageActivity extends EhActivity {
             }
 
             // Clear shared element
-            //把共享元素（不同Activity中，使用的相同元素）的过渡动画设置为空
+            // 把共享元素（不同Activity中，使用的相同元素）的过渡动画设置为空
             fragment.setSharedElementEnterTransition(null);
             fragment.setSharedElementReturnTransition(null);
             fragment.setEnterTransition(null);
             fragment.setExitTransition(null);
 
             // Check is target scene
-            // clazz.isInstance(fragment)，启动的这个Announcer，如果是fragment
+            // clazz.isInstance(fragment)，如果是fragment，启动的这个Announcer
+            // 如果该类的class的启动类型是standard，则forceNewScene为true
+            // findScene默认为false
+            // 该class的launchMode是否为SINGLE_TASK或者该fragment没有被detatch
             if (!forceNewScene && !findScene && clazz.isInstance(fragment) &&
                     (launchMode == SceneFragment.LAUNCH_MODE_SINGLE_TASK || !fragment.isDetached())) {
                 scene = (SceneFragment) fragment;
                 findScene = true;
                 createNewScene = false;
+                // 该语句在for循环中
+                // tag为mSceneTagList中的每个tag
                 findSceneTag = tag;
                 if (fragment.isDetached()) {
                     transaction.attach(fragment);
@@ -485,6 +495,7 @@ public abstract class StageActivity extends EhActivity {
         }
 
         // Handle tag list
+        // ArrayList<String> mSceneTagList = new ArrayList<>();
         mSceneTagList.clear();
         if (null != findSceneTag) {
             mSceneTagList.add(findSceneTag);
