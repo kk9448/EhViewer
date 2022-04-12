@@ -78,6 +78,7 @@ public abstract class EhActivity extends AppCompatActivity {
         }
     }
 
+    //activity创建的时候，要把Context加进去
     @Override
     protected void attachBaseContext(Context newBase) {
         Locale locale = null;

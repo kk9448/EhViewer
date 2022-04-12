@@ -79,12 +79,14 @@ public abstract class StageActivity extends EhActivity {
 
 
     //不同的scene有不同的launch_mode(是一个数字)
+    //如果不是之前自定义的数字，则抛出异常
     public static void registerLaunchMode(Class<?> clazz, @SceneFragment.LaunchMode int launchMode) {
         if (launchMode != SceneFragment.LAUNCH_MODE_STANDARD &&
                 launchMode != SceneFragment.LAUNCH_MODE_SINGLE_TOP &&
                 launchMode != SceneFragment.LAUNCH_MODE_SINGLE_TASK) {
             throw new IllegalStateException("Invalid launch mode: " + launchMode);
         }
+        //class和mode放进MAP中储存
         sLaunchModeMap.put(clazz, launchMode);
     }
 
@@ -94,6 +96,7 @@ public abstract class StageActivity extends EhActivity {
      * @return {@code true} for start scene
      */
     private boolean startSceneFromIntent(Intent intent) {
+        //getStringExtra获得intent中的附加信息
         String clazzStr = intent.getStringExtra(KEY_SCENE_NAME);
         if (null == clazzStr) {
             return false;
