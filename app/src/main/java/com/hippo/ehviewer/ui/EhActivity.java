@@ -32,6 +32,7 @@ import com.hippo.ehviewer.R;
 import com.hippo.ehviewer.Settings;
 import java.util.Locale;
 
+// 相比普通的Activity增加了，防止截屏， 安全等方面的启动项
 public abstract class EhActivity extends AppCompatActivity {
 
     @StyleRes
@@ -68,6 +69,8 @@ public abstract class EhActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(Settings.getEnabledSecurity()){
+            //把这个window中的内容看作需要保护的内容,
+            //防止被截屏,或防止内容显示在一些不安全的屏幕上
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                     WindowManager.LayoutParams.FLAG_SECURE);
         }else{
@@ -79,6 +82,9 @@ public abstract class EhActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         Locale locale = null;
         String language = Settings.getAppLanguage();
+        // 如果语言和系统设置的语言不一样
+        // locale为地区信息
+        // new locale(string language, string country, string variant)
         if (language != null && !language.equals("system")) {
             String[] split = language.split("-");
             if (split.length == 1) {
@@ -91,6 +97,7 @@ public abstract class EhActivity extends AppCompatActivity {
         }
 
         if (locale != null) {
+            //hippo自定义类，设置Locale
             newBase = ContextLocalWrapper.wrap(newBase, locale);
         }
 
