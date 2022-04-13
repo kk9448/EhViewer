@@ -56,6 +56,7 @@ public class SceneFragment extends Fragment {
 
     public void startScene(Announcer announcer) {
         //FragmentActivity解决3.0以下,没有Fragment的兼容问题
+        //3.0以上activity包含fragment
         FragmentActivity activity = getActivity();
         if (activity instanceof StageActivity) {
             ((StageActivity) activity).startScene(announcer);
