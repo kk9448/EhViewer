@@ -64,10 +64,19 @@ public final class CommonOperations {
     public static void checkUpdate(Activity activity, boolean feedback) {
         if (!UPDATING) {
             UPDATING = true;
+            //execute方法:串行下载
+            //executeOnExecutor方法:并行下载
+            //因为需要并行执行，参数是一个线程池，执行后， 会按照
+            //onPreExecute()->doInBackground()->onPostExecute()的顺序执行
             new UpdateTask(activity, feedback).executeOnExecutor(IoThreadPoolExecutor.getInstance());
         }
     }
 
+    //AsyncTask<Params, Progress, Custom Object>，
+    //第一个参数Params, 是在执行.execute(x)所传入的参数
+    //第二个Progress, 为进度条, 设置为Integer, 不使用设置为void
+    //第三个为自定义类型, 可以在前面的函数中return 自定义类型
+    //在onPostExecute(result)中调用
     private static final class UpdateTask extends AsyncTask<Void, Void, JSONObject> {
 
         private final Activity mActivity;
@@ -90,6 +99,7 @@ public final class CommonOperations {
         @Override
         protected JSONObject doInBackground(Void... params) {
             String url;
+            //是否检测beta版本，设定url
             if (Settings.getBetaUpdateChannel()) {
                 url = "http://www.ehviewer.com/update_beta.json";
             } else {
@@ -97,10 +107,12 @@ public final class CommonOperations {
             }
 
             try {
+                //返回一个JSONObject
                 return fetchUpdateInfo(url);
             } catch (Throwable e1) {
                 ExceptionUtils.throwIfFatal(e1);
 
+                //如果抛出异常， 则从github的url中获取
                 if (Settings.getBetaUpdateChannel()) {
                     url = "https://raw.githubusercontent.com/seven332/EhViewer/api/update_beta.json";
                 } else {
@@ -108,6 +120,7 @@ public final class CommonOperations {
                 }
 
                 try {
+                    //返回一个JSONObject
                     return fetchUpdateInfo(url);
                 } catch (Throwable e2) {
                     ExceptionUtils.throwIfFatal(e2);
