@@ -75,7 +75,7 @@ public final class CommonOperations {
     //AsyncTask<Params, Progress, Custom Object>，
     //第一个参数Params, 是在执行.execute(x)所传入的参数
     //第二个Progress, 为进度条, 设置为Integer, 不使用设置为void
-    //第三个为自定义类型, 可以在前面的函数中return 自定义类型
+    //第三个为自定义类型, 用来接收前面的函数中return， 方便之后使用
     //在onPostExecute(result)中调用
     private static final class UpdateTask extends AsyncTask<Void, Void, JSONObject> {
 
