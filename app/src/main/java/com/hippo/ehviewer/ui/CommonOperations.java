@@ -130,7 +130,9 @@ public final class CommonOperations {
         }
 
         private void showUpToDateDialog() {
+            // 新建一个对话框（dialogue）
             new AlertDialog.Builder(mActivity)
+                    //R.string.update_to_date = You are using the latest version of EhViewer.
                     .setMessage(R.string.update_to_date)
                     .setPositiveButton(android.R.string.ok, null)
                     .show();
@@ -138,7 +140,9 @@ public final class CommonOperations {
 
         private void showUpdateDialog(String versionName, int versionCode, String size, CharSequence info, final String url) {
             new AlertDialog.Builder(mActivity)
+                    //R.string.update = update
                     .setTitle(R.string.update)
+                    //R.string.update_plain = Version: %1$s\nSize: %2$s\n\n%3$s
                     .setMessage(mActivity.getString(R.string.update_plain, versionName, size, info))
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
@@ -149,6 +153,7 @@ public final class CommonOperations {
                     .setNegativeButton(R.string.update_ignore, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //在SharedPreferences里储存putInt(KEY_SKIP_UPDATE_VERSION, value);
                             Settings.putSkipUpdateVersion(versionCode);
                         }
                     }).show();
@@ -165,6 +170,7 @@ public final class CommonOperations {
             CharSequence info;
             String url;
 
+            //显示对话框，提示是否为最新版的逻辑
             try {
                 PackageManager pm = mActivity.getPackageManager();
                 PackageInfo pi = pm.getPackageInfo(mActivity.getPackageName(), PackageManager.GET_ACTIVITIES);
@@ -204,12 +210,14 @@ public final class CommonOperations {
 
     private static void doAddToFavorites(Activity activity, GalleryInfo galleryInfo,
             int slot, EhClient.Callback<Void> listener) {
+        //如果为-1，加入本地收藏
         if (slot == -1) {
             EhDB.putLocalFavorites(galleryInfo);
             listener.onSuccess(null);
         } else if (slot >= 0 && slot <= 9) {
             EhClient client = EhApplication.getEhClient(activity);
             EhRequest request = new EhRequest();
+            //EhClient.METHOD_ADD_FAVORITES = 9;
             request.setMethod(EhClient.METHOD_ADD_FAVORITES);
             request.setArgs(galleryInfo.gid, galleryInfo.token, slot, "");
             request.setCallback(listener);

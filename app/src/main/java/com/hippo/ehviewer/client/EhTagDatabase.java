@@ -64,6 +64,7 @@ public class EhTagDatabase {
   }
 
   @Nullable
+  //第二个tag组为用户输入
   private String search(byte[] tags, byte[] tag) {
     int low = 0;
     int high = tags.length;
