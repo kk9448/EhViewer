@@ -22,6 +22,7 @@ public class EhRequest {
 
     private int mMethod;
     private Object[] mArgs;
+    //Callback为自定义interface
     private EhClient.Callback mCallback;
     private EhConfig mEhConfig;
 

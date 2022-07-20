@@ -48,6 +48,9 @@ public class EhDaoGenerator {
         outDir.delete();
         outDir.mkdirs();
 
+        //Schema在这里可以翻译成计划的意思，在schema中加入要生成的class
+        //然后调用DaoGenerator().generateAll(schema, OUT_DIR);
+        //生成所需要的class
         Schema schema = new Schema(VERSION, PACKAGE);
         addDownloads(schema);
         addDownloadLabel(schema);

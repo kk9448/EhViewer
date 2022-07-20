@@ -16,10 +16,13 @@
 
 package com.hippo.ehviewer.client;
 
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
 import com.hippo.ehviewer.AppConfig;
 import com.hippo.ehviewer.GetText;
 import com.hippo.ehviewer.R;
@@ -90,8 +93,9 @@ public class EhEngine {
         sEhFilter = EhFilter.getInstance();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static void doThrowException(Call call, int code, @Nullable Headers headers,
-            @Nullable String body, Throwable e) throws Throwable {
+                                         @Nullable String body, Throwable e) throws Throwable {
         if (call.isCanceled()) {
             throw new CancelledException();
         }
@@ -130,8 +134,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static void throwException(Call call, int code, @Nullable Headers headers,
-        @Nullable String body, Throwable e) throws Throwable {
+                                       @Nullable String body, Throwable e) throws Throwable {
         try {
             doThrowException(call, code, headers, body, e);
         } catch (Throwable error) {
@@ -140,24 +145,35 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String signIn(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String username, String password) throws Throwable {
+                                String username, String password) throws Throwable {
         FormBody.Builder builder = new FormBody.Builder()
                 .add("UserName", username)
                 .add("PassWord", password)
                 .add("submit", "Log me in")
                 .add("CookieDate", "1")
                 .add("temporary_https", "off");
+
+        //API_SIGN_IN = "https://forums.e-hentai.org/index.php?act=Login&CODE=01";
         String url = EhUrl.API_SIGN_IN;
+        //eh论坛界面登陆地址
         String referer = "https://forums.e-hentai.org/index.php?act=Login&CODE=00";
+        //论坛首页地址
         String origin = "https://forums.e-hentai.org";
+        //TAG = EhEngine.class.getSimpleName();
         Log.d(TAG, url);
+        //EhRequestBuilder extends ChromeRequestBuilder
+        //ChromeRequestBuilder extends Request.Builder， Request.Builder为okhttp3中的类
+        //request中包含里用户的帐号密码等，前面添加过了
         Request request = new EhRequestBuilder(url, referer, origin)
                 .post(builder.build())
                 .build();
+        //Call类用来执行与request相关的各种操作
         Call call = okHttpClient.newCall(request);
 
         // Put call
+        // task为EhClient.Task
         if (null != task) {
             task.setCall(call);
         }
@@ -178,6 +194,8 @@ public class EhEngine {
         }
     }
 
+    //task为一个Task extends AsyncTask<Object, Void, Object>
+    //
     private static void fillGalleryList(@Nullable EhClient.Task task, OkHttpClient okHttpClient, List<GalleryInfo> list, String url, boolean filter) throws Throwable {
         // Filter title and uploader
         if (filter) {
@@ -357,6 +375,7 @@ public class EhEngine {
         String referer = EhUrl.getReferer();
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
+        //OkHttp3， 通过new Call建立请求
         Call call = okHttpClient.newCall(request);
 
         // Put call
@@ -368,6 +387,7 @@ public class EhEngine {
         Headers headers = null;
         int code = -1;
         try {
+            //call.execute()同步执行
             Response response = call.execute();
             code = response.code();
             headers = response.headers();

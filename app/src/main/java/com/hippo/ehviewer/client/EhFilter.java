@@ -51,13 +51,16 @@ public final class EhFilter {
     private EhFilter() {
         /**
          * 从EhDB中获得所有filter的集合
+         * filter是greenDao生存的
          * */
         List<Filter> list = EhDB.getAllFilter();
         for (int i = 0, n = list.size(); i < n; i++) {
             Filter filter = list.get(i);
             switch (filter.mode) {
+                //MODE_TITLE = 0
                 case MODE_TITLE:
                     filter.text = filter.text.toLowerCase();
+                    //List<Filter> mTitleFilterList
                     mTitleFilterList.add(filter);
                     break;
                 case MODE_UPLOADER:

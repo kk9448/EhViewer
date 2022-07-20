@@ -24,11 +24,13 @@ import java.util.regex.Pattern;
 
 public class SignInParser {
 
+    //compile()获得二个正则表达式
     private static final Pattern NAME_PATTERN = Pattern.compile("<p>You are now logged in as: (.+?)<");
     private static final Pattern ERROR_PATTERN = Pattern.compile(
             "(?:<h4>The error returned was:</h4>\\s*<p>(.+?)</p>)"
                     + "|(?:<span class=\"postcolor\">(.+?)</span>)");
 
+    //如果有匹配，则返回
     public static String parse(String body) throws Exception {
         Matcher m = NAME_PATTERN.matcher(body);
         if (m.find()) {

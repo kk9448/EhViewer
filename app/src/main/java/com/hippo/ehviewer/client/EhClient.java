@@ -70,12 +70,20 @@ public class EhClient {
         }
     }
 
+    //AsyncTask<Params, Progress, Custom Object>，
+    //第一个参数Params, 是在执行.execute(x)所传入的参数
+    //第二个Progress, 为进度条, 设置为Integer, 不使用设置为void
+    //第三个为自定义类型, 用来接收前面的函数中return， 方便之后使用
+    //在onPostExecute(result)中调用
     public class Task extends AsyncTask<Object, Void, Object> {
 
         private final int mMethod;
+        //Callback为自定义interface
         private Callback mCallback;
         private EhConfig mEhConfig;
 
+        //Call为OKhttp里的类
+        //Atomic为util.concurrent.atomic
         private final AtomicReference<Call> mCall = new AtomicReference<>();
         private final AtomicBoolean mStop = new AtomicBoolean();
 
@@ -86,11 +94,13 @@ public class EhClient {
         }
 
         // Called in Job thread
+        //call为OkHttp中的Call类（）
         public void setCall(Call call) throws CancelledException {
             if (mStop.get()) {
                 // Stopped Job thread
                 throw new CancelledException();
             } else {
+                //lazySet不会立刻执行，性能比较好
                 mCall.lazySet(call);
             }
         }
@@ -99,6 +109,7 @@ public class EhClient {
             return mEhConfig;
         }
 
+        //停止函数，放到主线程的handler中，运行callback.onCancel()
         public void stop() {
             if (!mStop.get()) {
                 mStop.lazySet(true);
@@ -106,6 +117,7 @@ public class EhClient {
                 if (mCallback != null) {
                     // TODO Avoid new runnable
                     final Callback finalCallback = mCallback;
+                    //SimpleHandler获取类主线程的handler
                     SimpleHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -113,7 +125,7 @@ public class EhClient {
                         }
                     });
                 }
-
+                //getStatus()，获得任务的当前状态  PENDING(等待执行)、RUNNING(正在运行)、FINISHED(运行完成)
                 Status status = getStatus();
                 if (status == Status.PENDING) {
                     cancel(false);
