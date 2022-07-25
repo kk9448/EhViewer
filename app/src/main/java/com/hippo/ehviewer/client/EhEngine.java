@@ -186,6 +186,7 @@ public class EhEngine {
             code = response.code();
             headers = response.headers();
             body = response.body().string();
+            //返回String
             return SignInParser.parse(body);
         } catch (Throwable e) {
             ExceptionUtils.throwIfFatal(e);

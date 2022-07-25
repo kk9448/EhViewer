@@ -18,6 +18,10 @@ package com.hippo.ehviewer.client;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.hippo.ehviewer.EhApplication;
 import com.hippo.ehviewer.client.exception.CancelledException;
 import com.hippo.util.ExceptionUtils;
@@ -62,6 +66,7 @@ public class EhClient {
 
     public void execute(EhRequest request) {
         if (!request.isCancelled()) {
+            //request.getMethod()返回一个int，(登陆等都对应一个int)
             Task task = new Task(request.getMethod(), request.getCallback(), request.getEhConfig());
             task.executeOnExecutor(mRequestThreadPool, request.getArgs());
             request.task = task;
@@ -70,6 +75,8 @@ public class EhClient {
         }
     }
 
+    //一个文件中，不能并列两个public class，但是一个public class可以作为一个public class的内部成员
+    //Task类是EhClient类的子成员
     //AsyncTask<Params, Progress, Custom Object>，
     //第一个参数Params, 是在执行.execute(x)所传入的参数
     //第二个Progress, 为进度条, 设置为Integer, 不使用设置为void
@@ -82,8 +89,8 @@ public class EhClient {
         private Callback mCallback;
         private EhConfig mEhConfig;
 
-        //Call为OKhttp里的类
-        //Atomic为util.concurrent.atomic
+        //Call为OkHttp里的类
+        //Atomic类为util.concurrent.atomic
         private final AtomicReference<Call> mCall = new AtomicReference<>();
         private final AtomicBoolean mStop = new AtomicBoolean();
 
@@ -94,7 +101,7 @@ public class EhClient {
         }
 
         // Called in Job thread
-        //call为OkHttp中的Call类（）
+        //call为OkHttp中的Call类
         public void setCall(Call call) throws CancelledException {
             if (mStop.get()) {
                 // Stopped Job thread
@@ -111,6 +118,7 @@ public class EhClient {
 
         //停止函数，放到主线程的handler中，运行callback.onCancel()
         public void stop() {
+            //如果mStop为false,则设置为true
             if (!mStop.get()) {
                 mStop.lazySet(true);
 
@@ -118,6 +126,9 @@ public class EhClient {
                     // TODO Avoid new runnable
                     final Callback finalCallback = mCallback;
                     //SimpleHandler获取类主线程的handler
+                    //Post(): Causes the Runnable r to be added to the message queue. The runnable will be run on the thread to which this handler is attached.
+                    //Params:r – The Runnable that will be executed.
+                    //Returns:Returns true if the Runnable was successfully placed in to the message queue. Returns false on failure, usually because the looper processing the message queue is exiting.
                     SimpleHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -144,8 +155,11 @@ public class EhClient {
             }
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         @SuppressWarnings("unchecked")
+        //doInBackground为AsyncTask<Object, Void, Object>中需要复写的函数
+        //.execute()执行AsyncTask
         protected Object doInBackground(Object... params) {
             try {
                 switch (mMethod) {
