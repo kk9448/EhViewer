@@ -160,6 +160,7 @@ public class EhClient {
         @SuppressWarnings("unchecked")
         //doInBackground为AsyncTask<Object, Void, Object>中需要复写的函数
         //.execute()执行AsyncTask
+        //public class Task extends AsyncTask<Object, Void, Object>
         protected Object doInBackground(Object... params) {
             try {
                 switch (mMethod) {

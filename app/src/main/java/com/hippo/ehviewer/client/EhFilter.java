@@ -51,7 +51,13 @@ public final class EhFilter {
     private EhFilter() {
         /**
          * 从EhDB中获得所有filter的集合
-         * filter是greenDao生存的
+         * filter是greenDao生成的
+         * 生成文件为FilterDao
+         * FilterDao类中有4个属性
+         * entity.addIdProperty(); (生成ID，为long型，并设置为主健)
+         * entity.addIntProperty("mode").notNull(); (生成int类型变量名为mode)
+         * entity.addStringProperty("text"); (生成string类型变量名为test)
+         * entity.addBooleanProperty("enable"); (生成Boolean类型变量名为enable)
          * */
         List<Filter> list = EhDB.getAllFilter();
         for (int i = 0, n = list.size(); i < n; i++) {

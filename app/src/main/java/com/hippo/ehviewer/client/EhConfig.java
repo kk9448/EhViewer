@@ -16,6 +16,7 @@
 
 package com.hippo.ehviewer.client;
 
+//检查ip是否合理和匹配
 import com.hippo.network.InetValidator;
 
 /**
@@ -28,6 +29,7 @@ public class EhConfig implements Cloneable {
      */
     public static final String KEY_UCONFIG = "uconfig";
 
+    //@see #注释，指向本类中的变量
     /**
      * The key of load images through the Hentai@Home Network
      * @see #LOAD_FROM_HAH_YES

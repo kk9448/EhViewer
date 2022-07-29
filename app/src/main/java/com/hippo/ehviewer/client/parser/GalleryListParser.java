@@ -41,10 +41,15 @@ public class GalleryListParser {
 
     private static final String TAG = GalleryListParser.class.getSimpleName();
 
+    //\d匹配数字，如3px， "\"表示的是字符\, "\\"表示转译字符(表示后面的\是), +匹配1次或多次
     private static final Pattern PATTERN_RATING = Pattern.compile("\\d+px");
+    //匹配如 height:3px;width:6px， ()是对+号作用范围的确定
     private static final Pattern PATTERN_THUMB_SIZE = Pattern.compile("height:(\\d+)px;width:(\\d+)px");
+    //匹配background-color:rgba(2,2,2)， \\(表示才表示真正的(
     private static final Pattern PATTERN_FAVORITE_SLOT = Pattern.compile("background-color:rgba\\((\\d+),(\\d+),(\\d+),");
+    //匹配3pages
     private static final Pattern PATTERN_PAGES = Pattern.compile("(\\d+) page");
+    //匹配page = 3
     private static final Pattern PATTERN_NEXT_PAGE = Pattern.compile("page=(\\d+)");
 
     private static final String[][] FAVORITE_SLOT_RGB = new String[][] {
@@ -67,6 +72,7 @@ public class GalleryListParser {
         public List<GalleryInfo> galleryInfoList;
     }
 
+    //返回总页数
     private static int parsePages(Document d, String body) throws ParseException {
         try {
             Elements es = d.getElementsByClass("ptt").first().child(0).child(0).children();
@@ -77,12 +83,15 @@ public class GalleryListParser {
         }
     }
 
+    //返回评价级别， 为字符串 "0.5" "1" "1.5" "2"
     private static String parseRating(String ratingStyle) {
         Matcher m = PATTERN_RATING.matcher(ratingStyle);
         int num1 = Integer.MIN_VALUE;
         int num2 = Integer.MIN_VALUE;
         int rate = 5;
         String re;
+        //把32px 变成32， 把1px变成、1
+        //所有的半星num2是21， 半星的num1为64，21， 1星为64， 1， 1星半为 48， 21， 2星为48， 1
         if (m.find()) {
             num1 = ParserUtils.parseInt(m.group().replace("px", ""), Integer.MIN_VALUE);
         }
@@ -294,6 +303,11 @@ public class GalleryListParser {
         return gi;
     }
 
+    //     Result内的属性
+    //     public int pages;
+    //     public int nextPage;
+    //     public boolean noWatchedTags;
+    //     public List<GalleryInfo> galleryInfoList;
     public static Result parse(@NonNull String body) throws Exception {
         Result result = new Result();
         Document d = Jsoup.parse(body);
@@ -301,8 +315,10 @@ public class GalleryListParser {
         try {
             Element ptt = d.getElementsByClass("ptt").first();
             Elements es = ptt.child(0).child(0).children();
+            //得到最大的页数
             result.pages = Integer.parseInt(es.get(es.size() - 2).text().trim());
 
+            // 元素e为执行下一页的element
             Element e = es.get(es.size() - 1);
             if (e != null) {
                 e = e.children().first();

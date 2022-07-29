@@ -80,8 +80,10 @@ public class EhEngine {
     private static final String SAD_PANDA_TYPE = "image/gif";
     private static final String SAD_PANDA_LENGTH = "9615";
 
+    //2019eh暂时关站的今日的那个jpg
     private static final String KOKOMADE_URL = "https://exhentai.org/img/kokomade.jpg";
 
+    //MediaType为OkHttp3中的类， json类型
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
 
@@ -197,6 +199,7 @@ public class EhEngine {
 
     //task为一个Task extends AsyncTask<Object, Void, Object>
     //
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static void fillGalleryList(@Nullable EhClient.Task task, OkHttpClient okHttpClient, List<GalleryInfo> list, String url, boolean filter) throws Throwable {
         // Filter title and uploader
         if (filter) {
@@ -250,10 +253,13 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static GalleryListParser.Result getGalleryList(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String url) throws Throwable {
+                                                          String url) throws Throwable {
+        //referer是http头部中的referer
         String referer = EhUrl.getReferer();
         Log.d(TAG, url);
+        //url是eh链接， referer是Header中的内容
         Request request = new EhRequestBuilder(url, referer).build();
         Call call = okHttpClient.newCall(request);
 
@@ -284,8 +290,9 @@ public class EhEngine {
     }
 
     // At least, GalleryInfo contain valid gid and token
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static List<GalleryInfo> fillGalleryListByApi(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            List<GalleryInfo> galleryInfoList, String referer) throws Throwable {
+                                                         List<GalleryInfo> galleryInfoList, String referer) throws Throwable {
         // We can only request 25 items one time at most
         final int MAX_REQUEST_SIZE = 25;
         List<GalleryInfo> requestItems = new ArrayList<>(MAX_REQUEST_SIZE);
@@ -299,8 +306,9 @@ public class EhEngine {
         return galleryInfoList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static void doFillGalleryListByApi(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            List<GalleryInfo> galleryInfoList, String referer) throws Throwable {
+                                               List<GalleryInfo> galleryInfoList, String referer) throws Throwable {
         JSONObject json = new JSONObject();
         json.put("method", "gdata");
         JSONArray ja = new JSONArray();
@@ -342,8 +350,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static GalleryDetail getGalleryDetail(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String url) throws Throwable {
+                                                 String url) throws Throwable {
         String referer = EhUrl.getReferer();
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
@@ -371,6 +380,7 @@ public class EhEngine {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Pair<PreviewSet, Integer> getPreviewSet(
             @Nullable EhClient.Task task, OkHttpClient okHttpClient, String url) throws Throwable {
         String referer = EhUrl.getReferer();
@@ -443,8 +453,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static GalleryCommentList commentGallery(@Nullable EhClient.Task task,
-            OkHttpClient okHttpClient, String url, String comment, String id) throws Throwable {
+                                                    OkHttpClient okHttpClient, String url, String comment, String id) throws Throwable {
         FormBody.Builder builder = new FormBody.Builder();
         if (id == null) {
             builder.add("commenttext_new", comment);
@@ -487,8 +498,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getGalleryToken(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            long gid, String gtoken, int page) throws Throwable {
+                                         long gid, String gtoken, int page) throws Throwable {
         JSONObject json = new JSONObject()
                 .put("method", "gtoken")
                 .put("pagelist", new JSONArray().put(
@@ -524,8 +536,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static FavoritesParser.Result getFavorites(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String url, boolean callApi) throws Throwable {
+                                                      String url, boolean callApi) throws Throwable {
         String referer = EhUrl.getReferer();
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
@@ -561,8 +574,9 @@ public class EhEngine {
      * @param dstCat -1 for delete, 0 - 9 for cloud favorite, others throw Exception
      * @param note max 250 characters
      */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Void addFavorites(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            long gid, String token, int dstCat, String note) throws Throwable {
+                                    long gid, String token, int dstCat, String note) throws Throwable {
         String catStr;
         if (dstCat == -1) {
             catStr = "favdel";
@@ -608,8 +622,9 @@ public class EhEngine {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Void addFavoritesRange(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            long[] gidArray, String[] tokenArray, int dstCat) throws Throwable {
+                                         long[] gidArray, String[] tokenArray, int dstCat) throws Throwable {
         AssertUtils.assertEquals(gidArray.length, tokenArray.length);
         for (int i = 0, n = gidArray.length; i < n; i++) {
             addFavorites(task, okHttpClient, gidArray[i], tokenArray[i], dstCat, null);
@@ -617,8 +632,9 @@ public class EhEngine {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static FavoritesParser.Result modifyFavorites(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String url, long[] gidArray, int dstCat, boolean callApi) throws Throwable {
+                                                         String url, long[] gidArray, int dstCat, boolean callApi) throws Throwable {
         String catStr;
         if (dstCat == -1) {
             catStr = "delete";
@@ -666,8 +682,9 @@ public class EhEngine {
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Pair<String, String>[] getTorrentList(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String url, long gid, String token) throws Throwable {
+                                                        String url, long gid, String token) throws Throwable {
         String referer = EhUrl.getGalleryDetailUrl(gid, token);
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
@@ -697,8 +714,9 @@ public class EhEngine {
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Pair<String, Pair<String, String>[]> getArchiveList(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-            String url, long gid, String token) throws Throwable {
+                                                                      String url, long gid, String token) throws Throwable {
         String referer = EhUrl.getGalleryDetailUrl(gid, token);
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
@@ -728,8 +746,9 @@ public class EhEngine {
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Void downloadArchive(@Nullable EhClient.Task task, OkHttpClient okHttpClient,
-                                    long gid, String token, String or, String res) throws Throwable {
+                                       long gid, String token, String or, String res) throws Throwable {
         if (or == null || or.length() == 0) {
             throw new EhException("Invalid form param or: " + or);
         }
@@ -775,8 +794,9 @@ public class EhEngine {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private static ProfileParser.Result getProfileInternal(@Nullable EhClient.Task task,
-            OkHttpClient okHttpClient, String url, String referer) throws Throwable {
+                                                           OkHttpClient okHttpClient, String url, String referer) throws Throwable {
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
         Call call = okHttpClient.newCall(request);
@@ -802,8 +822,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static ProfileParser.Result getProfile(@Nullable EhClient.Task task,
-            OkHttpClient okHttpClient) throws Throwable {
+                                                  OkHttpClient okHttpClient) throws Throwable {
         String url = EhUrl.URL_FORUMS;
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, null).build();
@@ -942,8 +963,9 @@ public class EhEngine {
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static GalleryPageParser.Result getGalleryPage(@Nullable EhClient.Task task,
-            OkHttpClient okHttpClient, String url, long gid, String token) throws Throwable {
+                                                          OkHttpClient okHttpClient, String url, long gid, String token) throws Throwable {
         String referer = EhUrl.getGalleryDetailUrl(gid, token);
         Log.d(TAG, url);
         Request request = new EhRequestBuilder(url, referer).build();
@@ -970,8 +992,9 @@ public class EhEngine {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static GalleryPageApiParser.Result getGalleryPageApi(@Nullable EhClient.Task task,
-            OkHttpClient okHttpClient, long gid, int index, String pToken, String showKey, String previousPToken) throws Throwable {
+                                                                OkHttpClient okHttpClient, long gid, int index, String pToken, String showKey, String previousPToken) throws Throwable {
         final JSONObject json = new JSONObject();
         json.put("method", "showpage");
         json.put("gid", gid);

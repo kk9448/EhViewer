@@ -591,6 +591,7 @@ public class EhDB {
     }
 
     public static synchronized List<Filter> getAllFilter() {
+        //DaoSession是greenDAO的生成文件
         return sDaoSession.getFilterDao().queryBuilder().list();
     }
 

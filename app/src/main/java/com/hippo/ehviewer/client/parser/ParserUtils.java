@@ -37,17 +37,22 @@ public class ParserUtils {
         if (str == null) {
             str = "";
         }
+        //StringUtils在hippo自建等万事屋之中，其中使用了org.apache.commons.lang3.StringUtils的代码
+        //举例 把"&lt;"换成"<"
         return StringUtils.unescapeXml(str).trim();
     }
 
+    //hippo新建了一个NumberUtils类，parseIntSafely方法相对于Integer.parseInt(),不抛出异常，返回default值
     public static int parseInt(String str, int defValue) {
         return NumberUtils.parseIntSafely(trim(str).replace(",", ""), defValue);
     }
 
+    //同parseIntSafely
     public static long parseLong(String str, long defValue) {
         return NumberUtils.parseLongSafely(trim(str).replace(",", ""), defValue);
     }
 
+    //同parseIntSafely
     public static float parseFloat(String str, float defValue) {
         return NumberUtils.parseFloatSafely(trim(str).replace(",", ""), defValue);
     }
