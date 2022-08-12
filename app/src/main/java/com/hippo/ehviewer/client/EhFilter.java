@@ -58,10 +58,12 @@ public final class EhFilter {
          * entity.addIntProperty("mode").notNull(); (生成int类型变量名为mode)
          * entity.addStringProperty("text"); (生成string类型变量名为test)
          * entity.addBooleanProperty("enable"); (生成Boolean类型变量名为enable)
+         * 获取类FilterDao表中所有的条目
          * */
         List<Filter> list = EhDB.getAllFilter();
         for (int i = 0, n = list.size(); i < n; i++) {
             Filter filter = list.get(i);
+            //把filter进行分类，放到4个List<Filter>中
             switch (filter.mode) {
                 //MODE_TITLE = 0
                 case MODE_TITLE:
@@ -135,8 +137,10 @@ public final class EhFilter {
     }
 
     public synchronized void deleteFilter(Filter filter) {
+        //清空EHDB中FilterDao中的该filter
         EhDB.deleteFilter(filter);
 
+        //清空EhFilter中，在具体分类中的filter
         switch (filter.mode) {
             case MODE_TITLE:
                 mTitleFilterList.remove(filter);
