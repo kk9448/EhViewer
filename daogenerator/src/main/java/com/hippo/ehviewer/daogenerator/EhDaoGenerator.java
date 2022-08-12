@@ -44,6 +44,7 @@ public class EhDaoGenerator {
     public static void generate() throws Exception {
         //删除该目录下的内容
         Utilities.deleteContents(new File(DELETE_DIR));
+        // OUT_DIR = "../app/src/main/java-gen";
         File outDir = new File(OUT_DIR);
         outDir.delete();
         outDir.mkdirs();
@@ -60,6 +61,8 @@ public class EhDaoGenerator {
         addLocalFavorites(schema);
         addBookmarks(schema);
         addFilter(schema);
+
+
         new DaoGenerator().generateAll(schema, OUT_DIR);
 
         adjustDownloadInfo();
@@ -71,6 +74,7 @@ public class EhDaoGenerator {
     }
 
     private static void addDownloads(Schema schema) {
+        // 会生成一个DownloadInfo
         Entity entity = schema.addEntity("DownloadInfo");
         entity.setTableName("DOWNLOADS");
         entity.setClassNameDao("DownloadsDao");
@@ -203,8 +207,14 @@ public class EhDaoGenerator {
     }
 
     private static void adjustDownloadInfo() throws Exception {
+        //DOWNLOAD_INFO_PATH = "../app/src/main/java-gen/com/hippo/ehviewer/dao/DownloadInfo.java";
+        //Roaster.parse
+        //Read the given File and parse its data into a new JavaType instance of the given type.
+        // 把一个文件读取成java类
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, new File(DOWNLOAD_INFO_PATH));
         // Remove field from GalleryInfo
+        // field其实就是一个类中的属性，那一块叫一个field
+        // DownloadInfo类 extends GalleryInfo，现在移除GalleryInfo的fields
         javaClass.removeField(javaClass.getField("gid"));
         javaClass.removeField(javaClass.getField("token"));
         javaClass.removeField(javaClass.getField("title"));
