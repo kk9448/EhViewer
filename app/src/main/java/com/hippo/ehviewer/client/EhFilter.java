@@ -164,6 +164,7 @@ public final class EhFilter {
         return 0 != mTagFilterList.size() || 0 != mTagNamespaceFilterList.size();
     }
 
+    //title中是否包含filter， 包含则返回true，否则返回false
     public synchronized boolean filterTitle(GalleryInfo info) {
         if (null == info) {
             return false;
@@ -172,8 +173,10 @@ public final class EhFilter {
         // Title
         String title = info.title;
         List<Filter> filters = mTitleFilterList;
+        // title不是空， 并且TitleFilter中有filter
         if (null != title && filters.size() > 0) {
             for (int i = 0, n = filters.size(); i < n; i++) {
+                //如果该filter被打开，并且包含这个标题，则返回true， 否则返回false
                 if (filters.get(i).enable && title.toLowerCase().contains(filters.get(i).text)) {
                     return false;
                 }
@@ -183,6 +186,7 @@ public final class EhFilter {
         return true;
     }
 
+    //如果filter中的text和和uploader相同，则返回true，否则返回false
     public synchronized boolean filterUploader(GalleryInfo info) {
         if (null == info) {
             return false;
@@ -212,6 +216,9 @@ public final class EhFilter {
         String filterNamespace;
         String filterName;
         int index = tag.indexOf(':');
+        //如果没有输入tag，则tagNamespace为空
+        //把tagName赋值为tag
+        //如果存在，把tag分为tagNamespace和tagName
         if (index < 0) {
             tagNamespace = null;
             tagName = tag;
@@ -219,6 +226,8 @@ public final class EhFilter {
             tagNamespace = tag.substring(0, index);
             tagName = tag.substring(index + 1);
         }
+
+        //把filter分为filterNamespace和filterName
         index = filter.indexOf(':');
         if (index < 0) {
             filterNamespace = null;
