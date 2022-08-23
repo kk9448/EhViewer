@@ -124,6 +124,7 @@ public class GalleryInfo implements Parcelable {
     public int favoriteSlot = -2;
     public String favoriteName;
 
+    //从tags或者title中提取language标签
     public final void generateSLang() {
         if (simpleTags != null) {
             generateSLangFromTags();
@@ -133,6 +134,7 @@ public class GalleryInfo implements Parcelable {
         }
     }
 
+    //遍历所有的tags， 找到最后一个语言标签，并把它赋值给simpleLanguage
     private void generateSLangFromTags() {
         for (String tag : simpleTags) {
             for (int i = 0; i < S_LANGS.length; i++) {
@@ -144,6 +146,7 @@ public class GalleryInfo implements Parcelable {
         }
     }
 
+    //从title中获取simpleLanguage
     private void generateSLangFromTitle() {
         for (int i = 0; i < S_LANGS.length; i++) {
             if (S_LANG_PATTERNS[i].matcher(title).find()) {

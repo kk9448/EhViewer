@@ -44,6 +44,7 @@ public class GalleryApiInfo implements Parcelable {
         return 0;
     }
 
+    //Parcel用来进行打包(只保留变量，函数部分会被去除)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.gid);

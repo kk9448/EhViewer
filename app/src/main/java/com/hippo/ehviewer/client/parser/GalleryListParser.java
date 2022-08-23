@@ -52,6 +52,7 @@ public class GalleryListParser {
     //匹配page = 3
     private static final Pattern PATTERN_NEXT_PAGE = Pattern.compile("page=(\\d+)");
 
+    //收藏夹颜色
     private static final String[][] FAVORITE_SLOT_RGB = new String[][] {
         new String[] { "0", "0", "0"},
         new String[] { "240", "0", "0"},
@@ -111,7 +112,10 @@ public class GalleryListParser {
         return re;
     }
 
+    //返回是第几个favourite slot
     private static int parseFavoriteSlot(String style) {
+        //Pattern中使用的第几个()，为.group()的第几个
+        //group()分别为rgb的3个颜色
         Matcher m = PATTERN_FAVORITE_SLOT.matcher(style);
         if (m.find()) {
             String r = m.group(1);
@@ -128,9 +132,9 @@ public class GalleryListParser {
         return -2;
     }
 
+    // Element类为Jsoup包中的类(用来解析html，java爬虫)， 用来提取HTMLElement
     private static GalleryInfo parseGalleryInfo(Element e) {
         GalleryInfo gi = new GalleryInfo();
-
         // Title, gid, token (required), tags
         Element glname = JsoupUtils.getElementByClass(e, "glname");
         if (glname != null) {

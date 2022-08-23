@@ -206,6 +206,7 @@ public final class EhFilter {
         return true;
     }
 
+    //如果rag和filter相等，返回true，否则返回false
     private boolean matchTag(String tag, String filter) {
         if (null == tag || null == filter) {
             return false;
@@ -237,10 +238,12 @@ public final class EhFilter {
             filterName = filter.substring(index + 1);
         }
 
+        //如果Namespace不相等
         if (null != tagNamespace && null != filterNamespace &&
                 !tagNamespace.equals(filterNamespace)) {
             return false;
         }
+        //如果tagName和filterName不相等
         if (!tagName.equals(filterName)) {
             return false;
         }
@@ -248,12 +251,14 @@ public final class EhFilter {
         return true;
     }
 
+    //filter整个tag， 包含namespace和name， tag完全相同会返回true， 不相同会返回false
     public synchronized boolean filterTag(GalleryInfo info) {
         if (null == info) {
             return false;
         }
 
         // Tag
+        // tags为所有tag的集合
         String[] tags = info.simpleTags;
         List<Filter> filters = mTagFilterList;
         if (null != tags && filters.size() > 0) {
@@ -269,6 +274,7 @@ public final class EhFilter {
         return true;
     }
 
+    //tagNamespace和filter是否相等
     private boolean matchTagNamespace(String tag, String filter) {
         if (null == tag || null == filter) {
             return false;
@@ -284,6 +290,7 @@ public final class EhFilter {
         }
     }
 
+    //filter和namespace相等， 则返回true
     public synchronized boolean filterTagNamespace(GalleryInfo info) {
         if (null == info) {
             return false;
