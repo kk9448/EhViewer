@@ -40,6 +40,7 @@
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config">
 
+<!--        为了防止可能出现的无法访问问题 -->
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <meta-data android:name="android.max_aspect" android:value="2.1"/>
@@ -71,6 +72,10 @@
                 <data android:host="lofi.e-hentai.org"/>
             </intent-filter>
 
+<!--    "android.intent.action.SEND"  表示可以把自己的应用添加到系统的发送（分享）列表中 -->
+<!--    mimeType="text/plain"， 在符合类型为text的时候     -->
+<!--    @表示引用  引用res/values/strings.xml中 name="keyword_search"的值-->
+<!--            -->
             <intent-filter android:label="@string/keyword_search">
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
