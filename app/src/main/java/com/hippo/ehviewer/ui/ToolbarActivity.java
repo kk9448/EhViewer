@@ -44,6 +44,7 @@ public abstract class ToolbarActivity extends EhActivity {
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(R.layout.activity_toolbar);
+        //v-21暂时不用管，最新的Android已经弃用
         getLayoutInflater().inflate(layoutResID, (ViewGroup) findViewById(R.id.content_panel), true);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }

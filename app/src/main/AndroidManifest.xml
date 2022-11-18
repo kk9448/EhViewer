@@ -95,6 +95,7 @@
             android:theme="@style/AppTheme.Gallery"
             android:launchMode="singleTask">
 
+<!--    mimeType="application/x-7z-compressed" 与 android:mimeType="application/7z" 是等效的      -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -111,6 +112,7 @@
                 <data android:mimeType="application/x-zip-compressed"/>
             </intent-filter>
 
+<!--            压缩文件的打开方式可以选择ehv   -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -123,6 +125,7 @@
                 <data android:pathPattern=".*\\.zip"/>
             </intent-filter>
 
+<!--            可以删除-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
