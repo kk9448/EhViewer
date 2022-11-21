@@ -48,9 +48,13 @@ public class SetSecurityActivity extends ToolbarActivity implements View.OnClick
         setContentView(R.layout.activity_set_security);
         setNavigationIcon(R.drawable.v_arrow_left_dark_x24);
 
+        //mPatternView为绘制密码的View
         mPatternView = (LockPatternView) ViewUtils.$$(this, R.id.pattern_view);
+        //Cancel button
         mCancel = ViewUtils.$$(this, R.id.cancel);
+        //Set button
         mSet = ViewUtils.$$(this, R.id.set);
+        //
         mFingerprint = (CheckBox) ViewUtils.$$(this, R.id.fingerprint_checkbox);
 
         String pattern = Settings.getSecurity();
