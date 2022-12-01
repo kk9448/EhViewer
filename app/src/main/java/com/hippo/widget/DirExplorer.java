@@ -143,16 +143,24 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         }
     }
 
+    //DirHolder是里面有一个TextView的ViewHolder
     private class DirAdapter extends Adapter<DirHolder> {
 
+        //创建每个Holder中的内容
+        //DirHolder的构造函数为一个TextView，把TextView赋值给DirHolder自带的TextView中去
         @Override
         public DirHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new DirHolder( LayoutInflater.from(getContext()).inflate(R.layout.item_dir_explorer, parent, false));
         }
 
+
         @Override
         public void onBindViewHolder(DirHolder holder, int position) {
+            //滑动到holder之后， 需要对holder进行操作
             File file = mFiles.get(position);
+            //对holder中对textView进行赋值
+            //File PARENT_DIR = null;
+            //String PARENT_DIR_NAME = "..";
             holder.textView.setText(file == PARENT_DIR ? PARENT_DIR_NAME : file.getName());
         }
 
@@ -162,6 +170,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         }
     }
 
+    //检查是否是一个目录
     static class DirFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
