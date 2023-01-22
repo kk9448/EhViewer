@@ -73,6 +73,8 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         mAdapter = new DirAdapter();
         setAdapter(mAdapter);
         setLayoutManager(new LinearLayoutManager(context));
+        //dp2pix(), dp转pix函数
+        //LinearDividerItemDecoration extends RecyclerView.ItemDecoration
         LinearDividerItemDecoration decoration = new LinearDividerItemDecoration(
                 LinearDividerItemDecoration.VERTICAL, AttrResources.getAttrColor(context, R.attr.dividerColor),
                 LayoutUtils.dp2pix(context, 1));
@@ -82,6 +84,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         setOnItemClickListener(this);
 
         mCurrentFile = Environment.getExternalStorageDirectory();
+        //如果外部储存没有装载，或者mCurrentFile为null
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || mCurrentFile == null) {
             mCurrentFile = new File("/");
@@ -94,9 +97,15 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
     }
 
     public void updateFileList() {
+        //File可以是一个文件夹，也可以是一个文件
+        //mCurrentFile是一个File，DIR_FILTER过滤出了所有是文件夹的文件
+        //File[] files是一个文件夹（路径）集合
+        //mCurrentFile = Environment.getExternalStorageDirectory();
         File[] files = mCurrentFile.listFiles(DIR_FILTER);
 
+        //mFiles是一个List<File>
         mFiles.clear();
+
         if (mCurrentFile.getParent() != null) {
             mFiles.add(PARENT_DIR);
         }
@@ -125,6 +134,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
 
     @Override
     public boolean onItemClick(EasyRecyclerView parent, View view, int position, long id) {
+        //从一个list<file>中，获取特定的一个file
         File file = mFiles.get(position);
         if (file == PARENT_DIR) {
             file = mCurrentFile.getParentFile();
@@ -158,9 +168,9 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         public void onBindViewHolder(DirHolder holder, int position) {
             //滑动到holder之后， 需要对holder进行操作
             File file = mFiles.get(position);
-            //对holder中对textView进行赋值
-            //File PARENT_DIR = null;
-            //String PARENT_DIR_NAME = "..";
+            // 对holder中对textView进行赋值
+            // File PARENT_DIR = null;
+            // String PARENT_DIR_NAME = "..";
             holder.textView.setText(file == PARENT_DIR ? PARENT_DIR_NAME : file.getName());
         }
 
@@ -170,8 +180,9 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         }
     }
 
-    //检查是否是一个目录
+
     static class DirFilter implements FileFilter {
+        //检查是否是一个目录
         @Override
         public boolean accept(File pathname) {
             return pathname.isDirectory();

@@ -22,6 +22,7 @@
     android:padding="@dimen/keyline_margin"
     android:orientation="vertical">
 
+<!--    路径和路径浏览器-->
     <TextView
         android:id="@+id/path"
         android:layout_width="match_parent"
@@ -38,6 +39,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
+
+<!--    选择下载路径底下的预设和确定选项  -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
