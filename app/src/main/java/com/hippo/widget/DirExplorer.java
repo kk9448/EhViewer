@@ -47,6 +47,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
     private static final File PARENT_DIR = null;
     private static final String PARENT_DIR_NAME = "..";
 
+    //mCurrentFile为下载目录
     private File mCurrentFile;
     private final List<File> mFiles = new ArrayList<>();
 
@@ -98,7 +99,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
 
     public void updateFileList() {
         //File可以是一个文件夹，也可以是一个文件
-        //mCurrentFile是一个File，DIR_FILTER过滤出了所有是文件夹的文件
+        //mCurrentFile是选择的一个路径，DIR_FILTER过滤出了所有是文件夹的文件
         //File[] files是一个文件夹（路径）集合
         //mCurrentFile = Environment.getExternalStorageDirectory();
         File[] files = mCurrentFile.listFiles(DIR_FILTER);
@@ -122,6 +123,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
 
     public void setCurrentFile(File file) {
         if (file != null && file.isDirectory()) {
+            //目前选择的路径
             mCurrentFile = file;
             updateFileList();
             mAdapter.notifyDataSetChanged();

@@ -76,6 +76,9 @@ public class DirPickerActivity extends ToolbarActivity
 
         Ripple.addRipple(mOk, !AttrResources.getAttrBoolean(this, R.attr.isLightTheme));
 
+        //mDefault已经被赋值为findViewById(R.id.preset);
+        //mOk = findViewById(R.id.ok);
+        // this传递的是调用该函数的class， 这里就是mDefault和mOK这两个View
         mDefault.setOnClickListener(this);
         mOk.setOnClickListener(this);
 
@@ -133,9 +136,14 @@ public class DirPickerActivity extends ToolbarActivity
     @Override
     public void onClick(@NonNull View v) {
         if (mDefault == v) {
+            //getExternalFilesDirs(),
             File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(this, null);
             File[] dirs = new File[externalFilesDirs.length + 1];
+            //默认储存路径/storage/emulated/0/Ehviewer/download
             dirs[0] = AppConfig.getDefaultDownloadDir();
+            //获取dirs【0】手机储存的公共目录
+            //获取dirs【1】手机储存的私有目录
+            //获取dirs【2】如果存在sd卡等，sd卡的应用私有目录，在这些目录下新建download文件夹
             for (int i = 0; i < externalFilesDirs.length; i++) {
                 dirs[i + 1] = new File(externalFilesDirs[i], "download");
             }
@@ -148,11 +156,13 @@ public class DirPickerActivity extends ToolbarActivity
 
             new AlertDialog.Builder(this).setItems(items, (dialog, which) -> {
                 File dir = dirs[which];
+                //如果不是目录，会弹出toast
                 if (!FileUtils.ensureDirectory(dir)) {
                     Toast.makeText(DirPickerActivity.this, R.string.directory_not_writable, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (mDirExplorer != null) {
+                    //mDirExplorer为DirExplorer
                     mDirExplorer.setCurrentFile(dir);
                 }
             }).show();
