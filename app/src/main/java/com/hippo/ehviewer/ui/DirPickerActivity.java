@@ -78,7 +78,7 @@ public class DirPickerActivity extends ToolbarActivity
 
         //mDefault已经被赋值为findViewById(R.id.preset);
         //mOk = findViewById(R.id.ok);
-        // this传递的是调用该函数的class， 这里就是mDefault和mOK这两个View
+        // this传递的是该class
         mDefault.setOnClickListener(this);
         mOk.setOnClickListener(this);
 
@@ -134,7 +134,8 @@ public class DirPickerActivity extends ToolbarActivity
     }
 
     @Override
-    public void onClick(@NonNull View v) {
+    public void onClick(@NonNull View v){
+        //点击时， 被点击的view会自动传入v
         if (mDefault == v) {
             //getExternalFilesDirs(),
             File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(this, null);
@@ -163,10 +164,13 @@ public class DirPickerActivity extends ToolbarActivity
                 }
                 if (mDirExplorer != null) {
                     //mDirExplorer为DirExplorer
+                    //setCurrentFile()的同时，会updateFileList();
+                    //预设弹出框，只是改变显示结果，
                     mDirExplorer.setCurrentFile(dir);
                 }
             }).show();
         } else if (mOk == v) {
+            //确定按钮
             if (null == mDirExplorer) {
                 return;
             }
@@ -176,7 +180,10 @@ public class DirPickerActivity extends ToolbarActivity
             } else {
                 Intent intent = new Intent();
                 intent.setData(Uri.fromFile(file));
+                //返回到前一个activity到时候， 会调用onActivityResult(int requestCode, int resultCode, Intent intent)
+                //RESULT_OK是resultCode
                 setResult(RESULT_OK, intent);
+                //Call this when your activity is done and should be closed. The ActivityResult is propagated back to whoever launched you via onActivityResult().
                 finish();
             }
         }

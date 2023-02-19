@@ -101,12 +101,14 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         //File可以是一个文件夹，也可以是一个文件
         //mCurrentFile是选择的一个路径，DIR_FILTER过滤出了所有是文件夹的文件
         //File[] files是一个文件夹（路径）集合
-        //mCurrentFile = Environment.getExternalStorageDirectory();
+        //mCurrentFile = Environment.getExternalStorageDirectory()或者是自定义路径;
+        //找出该路径下的所有目录
         File[] files = mCurrentFile.listFiles(DIR_FILTER);
 
         //mFiles是一个List<File>
         mFiles.clear();
 
+        //把父级目录加进去(文件夹选择菜单， 包含上一级和子目录菜单菜单)
         if (mCurrentFile.getParent() != null) {
             mFiles.add(PARENT_DIR);
         }
@@ -125,7 +127,9 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
         if (file != null && file.isDirectory()) {
             //目前选择的路径
             mCurrentFile = file;
+            //更新列表
             updateFileList();
+            //通知数据改变
             mAdapter.notifyDataSetChanged();
 
             if (mOnChangeDirListener != null) {
@@ -199,6 +203,7 @@ public class DirExplorer extends EasyRecyclerView implements EasyRecyclerView.On
             } else if (rhs == null) {
                 return Integer.MAX_VALUE;
             } else {
+                //按照名称排序
                 return lhs.getName().compareToIgnoreCase(rhs.getName());
             }
         }
